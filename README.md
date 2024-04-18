@@ -7,5 +7,8 @@ ALLALI MOHAMED BAHA EDIINE
 KADRI RIAD
 
 TAHRAOUI KHALED ARSELAN
+
+
+install dropdown dependency 
 ```
-install dropdown dependency  ---> npm install react-native-select-dropdown
+npm install react-native-select-dropdown
