@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { ImageBackground } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const SplashScreen = () => {
