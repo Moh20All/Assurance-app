@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { SafeAreaView, View, KeyboardAvoidingView, Text, TextInput, Image, StyleSheet, Platform, TouchableOpacity, } from "react-native";
-import SelectDropdown from 'react-native-select-dropdown'
+import React from "react";
+import { SafeAreaView, View, KeyboardAvoidingView, Text, TextInput, Image, StyleSheet, Platform, TouchableOpacity } from "react-native";
+import SelectDropdown from 'react-native-select-dropdown';
 
-const CreateAccount = ({navigation}) => {
-    const dropDownData = [{ title: 'Male' },
-    { title: 'Female' },
-    ];
+const CreateAccount = ({ navigation }) => {
+    const dropDownData = [{ title: 'Male' }, { title: 'Female' }];
     const currentPage = 1; // Assuming starting page is 1
-    
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <KeyboardAvoidingView
@@ -18,14 +16,11 @@ const CreateAccount = ({navigation}) => {
                 <View style={styles.container}>
                     <Image source={require('../assets/images/3d_character_206.png')} />
                     <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-
                         <View style={[styles.inputTextStyle, styles.boxShadow]}>
-                            <Text></Text>
                             <TextInput placeholder="First Name" style={{ width: '100%', alignContent: 'center' }} />
                         </View>
                         <View style={[styles.inputTextStyle, styles.boxShadow]}>
-                            <Text></Text>
-                            <TextInput placeholder="First Name" style={{ width: '100%', alignContent: 'center' }} />
+                            <TextInput placeholder="Last Name" style={{ width: '100%', alignContent: 'center' }} />
                         </View>
                         <View style={[{ width: '80%', flexDirection: 'row', justifyContent: 'space-between', paddingRight: 40, alignItems: 'center' }, styles.boxShadow]}>
                             <SelectDropdown
@@ -44,51 +39,33 @@ const CreateAccount = ({navigation}) => {
                                         <View style={[{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }]}>
                                             <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
                                         </View>
-
                                     );
-                                }
-                                }
+                                }}
                                 dropdownStyle={styles.dropdownMenuStyle}
                             />
                         </View>
-
                     </View>
-                    <View style={styles.boxShadow}>
-                        <TouchableOpacity style={[styles.btnStyle, styles.boxShadow]} onPress={()=>{navigation.navigate('Page2')}}>
-                            <Text style={{ color: '#FFF', fontSize: 20, fontWeight: 'bold' }}>
-                                Next
-                            </Text>
-                            <Image source={require('../assets/icons/greaterThanWhite.png')} />
-                        </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnStyle} onPress={() => navigation.navigate('Page2')}>
+                        <Text style={{ color: '#FFF', fontSize: 20, fontWeight: 'bold' }}>Next</Text>
+                        <Image source={require('../assets/icons/greaterThanWhite.png')} />
+                    </TouchableOpacity>
+                    <View style={styles.progressIndicator}>
+                        <View style={[styles.progressPoint, currentPage >= 1 && styles.activePoint]} />
+                        <View style={[styles.progressPoint, currentPage >= 2 && styles.activePoint]} />
+                        <View style={[styles.progressPoint, currentPage >= 3 && styles.activePoint]} />
+                        <View style={[styles.progressPoint, currentPage >= 4 && styles.activePoint]} />
                     </View>
-                    <View style={[styles.progressIndicator]}>
-                        <TouchableOpacity>
-                            <View style={[styles.progressPoint, currentPage >= 1 && styles.activePoint]} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <View style={[styles.progressPoint, currentPage >= 2 && styles.activePoint]} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <View style={[styles.progressPoint, currentPage >= 3 && styles.activePoint]} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <View style={[styles.progressPoint, currentPage >= 4 && styles.activePoint]} />
-                        </TouchableOpacity>
-
-
-                    </View>
-
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-around',
-
     },
     dropdownButtonStyle: {
         width: 200,
@@ -172,6 +149,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#E54F2C',
         marginHorizontal: 5
     },
+});
 
-})
 export default CreateAccount;
