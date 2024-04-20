@@ -1,63 +1,77 @@
-import React from "react";
-import { SafeAreaView, View, KeyboardAvoidingView, Text, TextInput, Image, StyleSheet, Platform, TouchableOpacity } from "react-native";
-import SelectDropdown from 'react-native-select-dropdown';
-
+import React, { useRef, useState } from "react";
+import { SafeAreaView, View, KeyboardAvoidingView, Text, TextInput, Image, StyleSheet, Platform, Animated, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
+import NextBtn from "../components/NextBtn";
+import ProgressPoints from "../components/ProgressIndicator";
+import CustomInputText from "../components/CustomInputText";
 const CreateAccount = ({ navigation }) => {
-    const dropDownData = [{ title: 'Male' }, { title: 'Female' }];
-    const currentPage = 1; // Assuming starting page is 1
+    const [firstName, setFirstName] = useState(null);
+    const [lastName, setLastName] = useState(null);
+    const [userName, setUserName] = useState(null);
+    const [valid, setValid] = useState(false);
 
+    const handleFirstNameInput = (text) => {
+        if (text.length >= 3 && /^[a-zA-Z]+$/.test(text)) {
+            setFirstName(text);
+        } else {
+            setFirstName(null);
+        }
+    }
+    const handleLastNameInput = (text) => {
+        if (text.length >= 3 && /^[a-zA-Z]+$/.test(text)) {
+            setLastName(text);
+        } else {
+            setLastName(null);
+        }
+    }
+    const handleUserNameInput = (text) => {
+        if (text.length >= 3 && /^[a-zA-Z]+$/.test(text)) {
+            setUserName(text);
+        } else {
+            setUserName(null);
+        }
+    }
+    const handleNextBtn = () => {
+        if (firstName == null || lastName == null || userName == null) {
+            if (firstName == null) Alert.alert('Fill the necessary Fields', "Invalide First Name")
+            if (lastName == null) Alert.alert('Fill the necessary Fields', "Invalide Last Name")
+            if (userName == null) Alert.alert('Fill the necessary Fields', "Invalide User Name")
+        } else {
+            navigation.navigate('Page2');
+        }
+    }
+
+    const handleKeyboardDismiss = () => {
+        Keyboard.dismiss();
+    }
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                enabled behavior={Platform.OS === 'ios' ? 'padding' : null}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
-            >
-                <View style={styles.container}>
-                    <Image source={require('../assets/images/3d_character_206.png')} />
-                    <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <View style={[styles.inputTextStyle, styles.boxShadow]}>
-                            <TextInput placeholder="First Name" style={{ width: '100%', alignContent: 'center' }} />
+        <TouchableWithoutFeedback onPress={handleKeyboardDismiss}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <KeyboardAvoidingView
+                    style={{ flex: 1 }}
+                    enabled
+                    behavior={Platform.OS === 'ios' ? 'padding' : null}
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
+                >
+                    <View style={styles.container}>
+                        <Image source={require('../assets/images/3d_character_206.png')} />
+                        <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+
+                            <View style={{ width: '80%' }}>
+                                <CustomInputText field={firstName} label={'First Name'} handlData={handleFirstNameInput} />
+
+                                <CustomInputText field={lastName} label={'Last Name'} handlData={handleLastNameInput} />
+
+                                <CustomInputText field={userName} label={'UserName'} handlData={handleUserNameInput} />
+                            </View>
+
                         </View>
-                        <View style={[styles.inputTextStyle, styles.boxShadow]}>
-                            <TextInput placeholder="Last Name" style={{ width: '100%', alignContent: 'center' }} />
-                        </View>
-                        <View style={[{ width: '80%', flexDirection: 'row', justifyContent: 'space-between', paddingRight: 40, alignItems: 'center' }, styles.boxShadow]}>
-                            <SelectDropdown
-                                data={dropDownData}
-                                renderButton={(selectedItem, isOpened) => {
-                                    return (
-                                        <View style={[styles.dropdownButtonStyle, styles.boxShadow]}>
-                                            <Text style={styles.dropdownButtonTxtStyle}>
-                                                {(selectedItem && selectedItem.title) || 'Select your gender'}
-                                            </Text>
-                                        </View>
-                                    );
-                                }}
-                                renderItem={(item, index, isSelected) => {
-                                    return (
-                                        <View style={[{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }]}>
-                                            <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
-                                        </View>
-                                    );
-                                }}
-                                dropdownStyle={styles.dropdownMenuStyle}
-                            />
-                        </View>
+                        <NextBtn handleButton={handleNextBtn} value={"Next"} />
+                        <ProgressPoints nbrPage={1} />
                     </View>
-                    <TouchableOpacity style={styles.btnStyle} onPress={() => navigation.navigate('Page2')}>
-                        <Text style={{ color: '#FFF', fontSize: 20, fontWeight: 'bold' }}>Next</Text>
-                        <Image source={require('../assets/icons/greaterThanWhite.png')} />
-                    </TouchableOpacity>
-                    <View style={styles.progressIndicator}>
-                        <View style={[styles.progressPoint, currentPage >= 1 && styles.activePoint]} />
-                        <View style={[styles.progressPoint, currentPage >= 2 && styles.activePoint]} />
-                        <View style={[styles.progressPoint, currentPage >= 3 && styles.activePoint]} />
-                        <View style={[styles.progressPoint, currentPage >= 4 && styles.activePoint]} />
-                    </View>
-                </View>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
+
     );
 };
 
@@ -66,88 +80,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-around',
-    },
-    dropdownButtonStyle: {
-        width: 200,
-        height: 50,
-        backgroundColor: '#E54F2C',
-        borderRadius: 12,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 12,
-    },
-    dropdownButtonTxtStyle: {
-        flex: 1,
-        fontSize: 18,
-        fontWeight: '500',
-        color: '#FFF',
-    },
-    dropdownMenuStyle: {
-        backgroundColor: '#E9ECEF',
-        borderRadius: 10,
-    },
-    dropdownItemStyle: {
-        width: '100%',
-        flexDirection: 'row',
-        paddingHorizontal: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: 8,
-    },
-    dropdownItemTxtStyle: {
-        flex: 1,
-        fontSize: 18,
-        fontWeight: '500',
-        color: '#151E26',
-    },
-    inputTextStyle: {
-        height: 60,
-        borderColor: '#222222',
-        backgroundColor: 'white',
-        borderBottomWidth: 3,
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-        width: '80%',
-        justifyContent: 'center'
-    },
-    btnStyle: {
-        width: '80%',
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        flexDirection: 'row',
-        backgroundColor: '#222222',
-        borderRadius: 10,
-    },
-    boxShadow: {
-        shadowColor: '#222222',
-        shadowOffset: {
-            width: 6,
-            height: 6
-        },
-        shadowOpacity: 0.6,
-        shadowRadius: 6,
-        elevation: 22,
-    },
-    progressIndicator: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        marginTop: 20,
-    },
-    progressPoint: {
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        backgroundColor: '#CCCCCC',
-        marginHorizontal: 5
-    },
-    activePoint: {
-        backgroundColor: '#E54F2C',
-        marginHorizontal: 5
     },
 });
 
