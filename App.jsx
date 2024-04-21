@@ -8,7 +8,7 @@ import CreateAccount from './screens/createAccount';
 import CreateAccount2 from './screens/createAccount2';
 import CreateAccount4 from './screens/createAccount4';
 import Page3 from './screens/createAccount3';
-
+import Home from './screens/home';
 
 const Stack = createNativeStackNavigator();
 const App = ()=>{
@@ -22,6 +22,7 @@ const App = ()=>{
       <Stack.Screen component={CreateAccount2} name={'Page2'} options={{headerShown:false}} />
       <Stack.Screen component={Page3} name="Page3" options={{headerShown:false}} />
       <Stack.Screen component={CreateAccount4} name={'Page4'} options={{headerShown:false}} />
+      <Stack.Screen component={Home} name={'Home'} options={{headerShown:false}} />
     </Stack.Navigator>
    </NavigationContainer>
   );

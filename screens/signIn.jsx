@@ -23,8 +23,7 @@ const SignIn = ({ navigation }) => {
 
     const handleSignIn = () => {
         // Perform sign-in logic with username and password
-        console.log("Username:", username);
-        console.log("Password:", password);
+        navigation.navigate('Home');
     };
 
     const handleKeyboardDismiss = () => {
