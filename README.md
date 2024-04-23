@@ -16,12 +16,14 @@ yarn start
 
 
 
-install this 
+install this
+# dropdown
 ```bash
-#dropdown
+
 npm install react-native-select-dropdown
 ```
+# date-picker
+
 ```bash
-#date-picker
 npm install react-native-date-picker
 ```
