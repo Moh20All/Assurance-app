@@ -5,13 +5,13 @@ const Card = ({ user }) => {
   return (
     <TouchableOpacity style={styles.cardContainer}>
       <View style={styles.cardContent}>
-        <Text style={styles.userName}>{user.name}</Text>
-        <Text style={styles.userInfo}>{user.username}</Text>
-        <Text style={styles.userInfo}>{user.email}</Text>
-        <Text style={styles.userInfo}>{user.phone}</Text>
-        <Text style={styles.userInfo}>{user.website}</Text>
-        <Text style={styles.address}>{`${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}`}</Text>
-        <Text style={styles.company}>{`${user.company.name}: ${user.company.catchPhrase}`}</Text>
+        <Text style={styles.userName}>{`${user.first_name} ${user.last_name}`}</Text>
+        <Text style={styles.userInfo}>{`Email: ${user.email}`}</Text>
+        <Text style={styles.userInfo}>{`Date of Birth: ${user.dateofbirth}`}</Text>
+        <Text style={styles.userInfo}>{`Place of Birth: ${user.placeofbirth}`}</Text>
+        <Text style={styles.userInfo}>{`Address: ${user.adress}`}</Text>
+        <Text style={styles.userInfo}>{`Phone Number: ${user.phone_number}`}</Text>
+        <Text style={styles.userInfo}>{`Driving License: ${user.driving_lisence ? 'Yes' : 'No'}`}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -42,16 +42,6 @@ const styles = StyleSheet.create({
   userInfo: {
     fontSize: 16,
     marginVertical: 5,
-  },
-  address: {
-    fontSize: 16,
-    fontStyle: 'italic',
-    marginTop: 10,
-  },
-  company: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 10,
   },
 });
 
