@@ -83,7 +83,7 @@ const Home = () => {
 
                     <View style={styles.headerIconsContainer}>
                         <Image source={require('../assets/icons/phone-call.png')} />
-                        <Image source={require('../assets/icons/profileSettings.png')} />
+                        <Image source={require('../assets/icons/profileSettings.png')} style={styles.headerIcons} />
                     </View>
                 </View>
 
@@ -194,6 +194,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         gap:5
+    },
+    headerIcons:{
+        width:30,
+        height:30
     },
     userData: {
         width: '100%',
