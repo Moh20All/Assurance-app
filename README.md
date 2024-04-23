@@ -1,11 +1,11 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-This project is deloloped by :
-# Allali Mohamed Baha eddine 
+# Contributers :
+Allali Mohamed Baha eddine 
 
-#Kadri Riad
+Kadri Riad
 
-#Tahraoui khaled Arclan
+Tahraoui khaled Arclan
 
 ```bash
 # using npm
