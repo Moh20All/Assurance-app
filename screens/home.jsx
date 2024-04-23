@@ -125,22 +125,22 @@ const Home = () => {
                 </View>
 
                 <TouchableOpacity style={styles.bottomButton}>
-                    <Image source={require('../assets/icons/add.png')} />
+                    <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
                     <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
                     <Image source={require("../assets/icons/greaterThanWhite.png")} />
                 </TouchableOpacity>
 
                 <View style={styles.footer}>
                     <TouchableOpacity style={styles.footerButton}>
-                        <Image source={require('../assets/icons/hut.png')} />
+                        <Image source={require('../assets/icons/hut.png')} style={styles.footerImg} />
                         <Text style={styles.footerButtonText}>Dashboard</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.footerButton}>
-                        <Image source={require('../assets/icons/car-insurance.png')} />
+                        <Image source={require('../assets/icons/car-insurance.png')} style={styles.footerImg} />
                         <Text style={styles.footerButtonText}>Insurances</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.footerButton}>
-                        <Image source={require('../assets/icons/fender-bender.png')} />
+                        <Image source={require('../assets/icons/fender-bender.png')} style={styles.footerImg} />
                         <Text style={styles.footerButtonText}>Claims</Text>
                     </TouchableOpacity>
                 </View>
@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
         width: '20%',
         justifyContent: 'space-between',
         alignItems: 'center',
+        gap:5
     },
     userData: {
         width: '100%',
@@ -274,21 +275,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly'
     },
     settingsButton: {
-        borderWidth: 2,
         borderRadius: 50,
-        padding: 2,
-        borderColor: 'lightgrey'
+        padding: 3,
     },
     renewButton: {
         borderRadius: 10,
         height: 40,
         width: 80,
-        backgroundColor: "#222222",
+        backgroundColor: "#41B06E",
         alignItems: 'center',
         justifyContent: 'center'
     },
     renewButtonText: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
         color: 'white'
     },
@@ -303,7 +302,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: 20,
         marginBottom: 100,
-        borderRadius: 30
+        borderRadius: 30,
+        gap:5
+    },
+    addicon:{
+        width:25,
+        height:25,
+        
     },
     bottomButtonText: {
         color: '#FFF',
@@ -311,7 +316,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         width: '100%',
-        height: 80,
+        height: 70,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
@@ -325,13 +330,15 @@ const styles = StyleSheet.create({
         borderRightColor: '#222222',
         borderRightWidth: 1,
         width: '33%',
-        height: '100%'
+        height: '80%'
     },
     footerButtonText: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#222222'
-    }
+    },
+    footerImg:{
+        transform: [{ scale: 0.85 }]
+    },
 });
-
 export default Home;
