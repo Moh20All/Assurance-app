@@ -80,13 +80,13 @@ const Home = () => {
                         <Text style={styles.headerText}>Welcome {firstName}</Text>
                         <Text style={styles.headerTextBold}>Dashboard</Text>
                     </View>
-
+    
                     <View style={styles.headerIconsContainer}>
                         <Image source={require('../assets/icons/phone-call.png')} />
                         <Image source={require('../assets/icons/profileSettings.png')} style={styles.headerIcons} />
                     </View>
                 </View>
-
+    
                 <View style={styles.userData}>
                     <Image source={require('../assets/images/Capture.png')} />
                     <View style={styles.userDataTextContainer}>
@@ -94,7 +94,7 @@ const Home = () => {
                         <Text style={styles.userDataText}>{firstName} {lastName}</Text>
                     </View>
                 </View>
-
+    
                 <View style={styles.iconContainer}>
                     <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(1)}>
                         <View style={styles.iconBadge}>
@@ -115,21 +115,22 @@ const Home = () => {
                         <Image style={styles.iconImage} source={require('../assets/icons/motorbike.png')} />
                     </TouchableOpacity>
                 </View>
-
+    
                 <View style={styles.flatListContainer}>
                     <FlatList
                         data={data}
                         keyExtractor={item => item.id}
                         renderItem={renderItem}
                     />
-                </View>
 
                 <TouchableOpacity style={styles.bottomButton}>
                     <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
                     <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
                     <Image source={require("../assets/icons/greaterThanWhite.png")} />
                 </TouchableOpacity>
-
+                </View>
+    
+    
                 <View style={styles.footer}>
                     <TouchableOpacity style={styles.footerButton}>
                         <Image source={require('../assets/icons/hut.png')} style={styles.footerImg} />
@@ -144,10 +145,11 @@ const Home = () => {
                         <Text style={styles.footerButtonText}>Claims</Text>
                     </TouchableOpacity>
                 </View>
-
+    
             </View>
         </SafeAreaView>
     );
+    
 };
 
 const styles = StyleSheet.create({
@@ -296,19 +298,19 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     bottomButton: {
-        position: 'absolute',
-        bottom: 0,
-        width: '80%',
+        width: '100%',
         height: 60,
         backgroundColor: '#222222',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: 20,
-        marginBottom: 100,
-        borderRadius: 30,
-        gap:5
+        marginBottom: -50, // Adjust this value as needed
+        borderRadius: 10,
+        gap: 5,
+        marginTop: 10 // Adjust this value as needed
     },
+    
     addicon:{
         width:25,
         height:25,
