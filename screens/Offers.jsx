@@ -1,20 +1,22 @@
 import React from "react";
-import {View, SafeAreaView, KeyboardAvoidingView, Platform, StyleSheet, Text } from "react-native";
+import { View, SafeAreaView, KeyboardAvoidingView, Platform, StyleSheet, Text } from "react-native";
 
 const Offers = ({ navigation }) => {
-const company = "trust";
+    const company = "trust";
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <KeyboardAvoidingView style={{ flex: 1 }}
-                enabled behavior={Platform.OS === 'ios' ? 'padding' : null}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}>
-
-            </KeyboardAvoidingView>
-            <View >
-            <View style={styles.titlecontainer}>
-                    <Text style={styles.title}>Les offers de {company}</Text>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                enabled
+                behavior={Platform.OS === 'ios' ? 'padding' : null}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
+            >
+                <View style={styles.container}>
+                    <View style={styles.titlecontainer}>
+                        <Text style={styles.title}>Les offers de {company}</Text>
+                    </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
@@ -22,8 +24,8 @@ const company = "trust";
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems:'center',
-        justifyContent:'space-around',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     title: {
         fontSize: 28,
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
         padding: 2
     },
     titlecontainer: {
-        marginTop: 80
+        
     },
 })
 
