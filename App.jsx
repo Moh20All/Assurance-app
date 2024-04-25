@@ -5,9 +5,9 @@ import SplashScreen from './screens/splashScreen';
 import SignIn from './screens/signIn';
 import ForgetPasswod from './screens/forgetPassword';
 import CreateAccount from './screens/createAccount';
-import CreateAccount2 from './screens/createAccount2';
+import Companies from './screens/Companies';
 import CreateAccount4 from './screens/createAccount4';
-import Page3 from './screens/createAccount3';
+import Offers from './screens/Offers';
 import Home from './screens/home';
 
 const Stack = createNativeStackNavigator();
@@ -19,8 +19,8 @@ const App = ()=>{
       <Stack.Screen component={SignIn} name='SignIn' options={{ headerShown: false }}/>
       <Stack.Screen component={ForgetPasswod} name='ForgetPassword'options={{ headerShown: false }} />
       <Stack.Screen component={CreateAccount} name='CreateAccount' options={{headerShown:false}}  />
-      <Stack.Screen component={CreateAccount2} name={'Page2'} options={{headerShown:false}} />
-      <Stack.Screen component={Page3} name="Page3" options={{headerShown:false}} />
+      <Stack.Screen component={Companies} name={'Companies'} options={{headerShown:false}} />
+      <Stack.Screen component={Offers} name="Offers" options={{headerShown:false}} />
       <Stack.Screen component={CreateAccount4} name={'Page4'} options={{headerShown:false}} />
       <Stack.Screen component={Home} name={'Home'} options={{headerShown:false}} />
     </Stack.Navigator>

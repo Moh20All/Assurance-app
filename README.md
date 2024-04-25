@@ -15,6 +15,10 @@ npm start
 # OR using Yarn
 yarn start
 ```
+```bash
+# install assets
+npx react-native-asset
+```
 
 
 

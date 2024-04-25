@@ -155,6 +155,7 @@ const Home = () => {
 const styles = StyleSheet.create({
     safeAreaView: {
         flex: 1,
+        fontFamily:'InterDisplay-Regular'
     },
     container: {
         flex: 1,
