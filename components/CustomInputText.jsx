@@ -1,35 +1,34 @@
 
 import React, { useRef, useState } from "react";
-import {  View, Text, TextInput, StyleSheet, Animated } from "react-native";
+import { View, Text, TextInput, StyleSheet, Animated } from "react-native";
+import colors from "../assets/Colors";
 
+const CustomInputText = ({ field, label, handlData, contentType }) => {
+    const [empty, setEmpty] = useState(true)
 
-const CustomInputText = ({field,label,handlData,contentType}) => {
-    const [empty,setEmpty]=useState(true)
-
-    const transY=useRef(new Animated.Value(0));
-    const transX=transY.current.interpolate({
-        inputRange:[-40,0],
-        outputRange:[-10,0],
-        extrapolate:'clamp'
+    const transY = useRef(new Animated.Value(0));
+    const transX = transY.current.interpolate({
+        inputRange: [-40, 0],
+        outputRange: [-10, 0],
+        extrapolate: 'clamp'
     })
 
-    const handleFocus =()=>{
-        Animated.timing(transY.current,{
-            toValue:-40,
-            duration:300,
-            useNativeDriver:true
+    const handleFocus = () => {
+        Animated.timing(transY.current, {
+            toValue: -40,
+            duration: 300,
+            useNativeDriver: true
         }).start();
     }
-    const handleBlur =({field})=>{
-        if(field==null)
-        {
-            Animated.timing(transY.current,{
-            toValue:0,
-            duration:300,
-            useNativeDriver:true
-        }).start();
+    const handleBlur = ({ field }) => {
+        if (field == null) {
+            Animated.timing(transY.current, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true
+            }).start();
         }
-       
+
     }
     return (
         <View style={[styles.inputTextStyle, styles.boxShadow, { borderBottomColor: field ? 'green' : 'red' }]}>

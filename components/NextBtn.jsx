@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Image, Text, StyleSheet } from 'react-native';
+import colors from '../assets/Colors';
 
 const NextBtn = ({ handleButton,value }) => {
     return (
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 20,
         flexDirection: 'row',
-        backgroundColor: '#E54F2C',
+        backgroundColor: colors.blue,
         borderRadius: 10,
     },
     boxShadow: {

@@ -1,14 +1,24 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-const CompanyCard = ({ logo, title, description, onPress }) => {
+const CompanyCard = ({ logo, title, onPress }) => {
+
+  const imgUrl = () => {
+    switch (logo) {
+      case 1: return require('../assets/images/saa.jpg')
+      case 2: return require('../assets/images/caat.png')
+      case 3: return require('../assets/images/trust.png')
+      case 5: return require('../assets/images/alliance.jpg')
+      default: return require('../assets/icons/error.png')
+
+    }
+  }
   return (
-    <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
+    <TouchableOpacity style={styles.cardContainer} onPress={()=>onPress(logo)}>
       <View style={styles.contentContainer}>
-        <Image source={logo} style={styles.logo} />
+        <Image source={imgUrl()} style={styles.logo} />
         <View style={styles.textContainer}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.description}>{description}</Text>
         </View>
       </View>
       <View style={styles.arrowContainer}>
@@ -26,6 +36,7 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
+    marginHorizontal:10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -41,8 +52,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logo: {
-    width: 30,
-    height: 30,
+    width: 50,
+    height: 50,
     marginRight: 15,
   },
   textContainer: {

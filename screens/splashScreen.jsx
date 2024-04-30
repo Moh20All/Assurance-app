@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ImageBackground } from 'react-native';
+import { ImageBackground, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,32 +8,38 @@ const SplashScreen = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // Navigate to SignIn after 2 seconds
       navigation.reset({
         index: 0,
-        routes: [{ name: 'SignIn' }],
+        routes: [{ name: 'Welcome' }],
       });
-    }, 2400);
+    }, 2500);
 
-    // Clear the timer when the component unmounts
     return () => clearTimeout(timer);
   }, []);
 
   return (
+
+    <View style={styles.container}>
     <ImageBackground
       source={require('../assets/images/splashScreen.png')}
       resizeMode="cover"
-      style={styles.container}
+      style={styles.imageBackground}
     >
-      {/* Add any content you want to display on the splash screen */}
     </ImageBackground>
+  </View>
+    
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  imageBackground: {
+    width: 400,
+    height: 250,
   },
 });
 

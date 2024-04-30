@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, SafeAreaView, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import colors from "../assets/Colors";
 
 const Home = () => {
     const [firstName, setFirstName] = useState('Riad')
@@ -77,21 +78,19 @@ const Home = () => {
             <View style={styles.container}>
                 <View style={[styles.header, styles.boxShadow]}>
                     <View style={styles.headerTextContainer}>
-                        <Text style={styles.headerText}>Welcome {firstName}</Text>
                         <Text style={styles.headerTextBold}>Dashboard</Text>
                     </View>
     
                     <View style={styles.headerIconsContainer}>
-                        <Image source={require('../assets/icons/phone-call.png')} />
-                        <Image source={require('../assets/icons/profileSettings.png')} style={styles.headerIcons} />
+                        <Image source={require('../assets/icons/phone-call.png')} style={styles.headerIcons}/>
+                        <Image  source={require('../assets/icons/profileSettings.png')} style={styles.headerIcons} />
                     </View>
                 </View>
     
                 <View style={styles.userData}>
-                    <Image source={require('../assets/images/Capture.png')} />
+                    <Image style={{width:80,height:100}} source={require('../assets/images/large-removebg.png')} />
                     <View style={styles.userDataTextContainer}>
-                        <Text style={styles.userDataText}>Welcome to your Relio</Text>
-                        <Text style={styles.userDataText}>{firstName} {lastName}</Text>
+                        <Text style={styles.userDataText}>Welcome {firstName} {lastName}</Text>
                     </View>
                 </View>
     
@@ -163,9 +162,9 @@ const styles = StyleSheet.create({
     },
     header: {
         width: '100%',
-        height: 80,
+        height: 50,
         flexDirection: 'row',
-        padding: 20,
+        paddingHorizontal:10,
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: '#FFFF',
@@ -184,27 +183,27 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     headerText: {
-        fontSize: 18,
+        fontSize: 16,
     },
     headerTextBold: {
         color: '#222222',
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
     },
     headerIconsContainer: {
         flexDirection: 'row',
-        width: '20%',
+        width: '15%',
         justifyContent: 'space-between',
         alignItems: 'center',
         gap:5
     },
     headerIcons:{
-        width:30,
-        height:30
+        width:25,
+        height:25
     },
     userData: {
         width: '100%',
-        height: 100,
+        height: 80,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
@@ -215,12 +214,12 @@ const styles = StyleSheet.create({
     },
     userDataText: {
         color: '#222222',
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
     },
     iconContainer: {
         width: '80%',
-        height: 50,
+        height: 30,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',
@@ -258,7 +257,7 @@ const styles = StyleSheet.create({
     itemContainer: {
         width: '100%',
         backgroundColor: 'white',
-        height: 120,
+        height: 80,
         flexDirection: 'row',
         marginVertical: 20,
         alignItems: 'center',
@@ -271,7 +270,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly'
     },
     itemId: {
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#222222'
     },
@@ -284,37 +283,38 @@ const styles = StyleSheet.create({
     settingsButton: {
         borderRadius: 50,
         padding: 3,
+        borderWidth:1
     },
     renewButton: {
         borderRadius: 10,
         height: 40,
         width: 80,
-        backgroundColor: "#41B06E",
+        backgroundColor: colors.aqua,
         alignItems: 'center',
         justifyContent: 'center'
     },
     renewButtonText: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: 'white'
+        color: '#000'
     },
     bottomButton: {
         width: '100%',
-        height: 60,
-        backgroundColor: '#222222',
+        height: 50,
+        backgroundColor: colors.blue,
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: 20,
-        marginBottom: -50, // Adjust this value as needed
+        marginBottom: -70, // Adjust this value as needed
         borderRadius: 10,
         gap: 5,
         marginTop: 10 // Adjust this value as needed
     },
     
     addicon:{
-        width:25,
-        height:25,
+        width:20,
+        height:20,
         
     },
     bottomButtonText: {
@@ -323,12 +323,12 @@ const styles = StyleSheet.create({
     },
     footer: {
         width: '100%',
-        height: 70,
+        height: 50,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
         position: 'absolute',
-        bottom: 0,
+        bottom: 3,
         backgroundColor: '#FFF',
     },
     footerButton: {
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
         color: '#222222'
     },
     footerImg:{
-        transform: [{ scale: 0.85 }]
+        transform: [{ scale: 0.6 }]
     },
 });
 export default Home;

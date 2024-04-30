@@ -1,58 +1,37 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, KeyboardAvoidingView, Text, Image, StyleSheet, Platform, TouchableOpacity, Button, Alert, ScrollView } from "react-native";
+import { SafeAreaView, View, KeyboardAvoidingView, Text, Image, StyleSheet, Platform, TouchableOpacity, Button, Alert, ScrollView, FlatList } from "react-native";
 import CompanyCard from "../components/CompanyCard";
+import insuranceData from '../insuranceData.json';
 
-const CreateAccount2 = ({ navigation }) => {
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [gender, setGender] = useState(null);
-    const HandleClick = ()=>{
-        navigation.navigate("Offers")
+const Companies  = ({ navigation }) => {
+    const HandleClick = (id) => {
+        navigation.navigate("Offers", id);
     };
+    
 
-
+    const renderItem = ({item}) => {
+        return (
+            <View style={{marginVertical:10}}>
+                <CompanyCard logo={item.id} title={item.name} onPress={()=>HandleClick(item.id)} />
+            </View>
+        );
+    };
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                enabled behavior={Platform.OS === 'ios' ? 'padding' : null}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
-            >
+            <View style={{flex:1,width:'100%',alignItems:'center'}}>
                 <View style={styles.titlecontainer}>
                     <Text style={styles.title}>il faut choisir une compagnie d'assurance</Text>
                 </View>
-                <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                    <CompanyCard
-                        logo={require('../assets/images/saa.jpg')}
-                        title="Saa"
-                        description="Saa description"
-                        onPress={(e) => HandleClick()}
-                    />
-                    <CompanyCard
-                        logo={require('../assets/images/caat.png')}
-                        title="Caat"
-                        description="Caat description"
-                        onPress={(e) => HandleClick()}
-                    />
-                    <CompanyCard
-                        logo={require('../assets/images/trust.png')}
-                        title="Trust"
-                        description="Trust description"
-                        onPress={(e) => HandleClick()}
-                    />
-                    <CompanyCard
-                        logo={require('../assets/images/salama.png')}
-                        title="Salama"
-                        description="Salama description"
-                        onPress={(e) => HandleClick()}
-                    />
-                    <CompanyCard
-                        logo={require('../assets/images/alliance.jpg')}
-                        title="Alliance"
-                        description="Alliance description"
-                        onPress={(e) => HandleClick()}
-                    />
-                </ScrollView>
-            </KeyboardAvoidingView>
+                <View style={{width:'100%'}}>
+                    <FlatList
+                    data={insuranceData.insuranceCompanies}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => { item.id.toString() }}
+                />
+                </View>
+               
+            </View>
+
         </SafeAreaView>
     );
 };
@@ -75,7 +54,7 @@ const styles = StyleSheet.create({
     },
     scrollViewContent: {
         flex: 1,
-        gap:20,
+        gap: 20,
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
@@ -83,4 +62,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default CreateAccount2;
+export default Companies ;

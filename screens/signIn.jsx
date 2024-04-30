@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, Image,TouchableWithoutFeedback, TouchableOpacity, Keyboard } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, Image, TouchableWithoutFeedback, TouchableOpacity, Keyboard } from "react-native";
 import PasswordInput from "../components/PasswordInput";
 import CustomInputText from "../components/CustomInputText";
+import colors from "../assets/Colors";
+
+
 const SignIn = ({ navigation }) => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState("");
     const handleUsernameChange = (text) => {
-        if(text.length==0)
-        {
+        if (text.length == 0) {
             setUsername(null)
         }
-        else{
+        else {
             setUsername(text);
 
         }
-        
+
     };
 
     const handlePasswordChange = (text) => {
@@ -22,7 +24,6 @@ const SignIn = ({ navigation }) => {
     };
 
     const handleSignIn = () => {
-        // Perform sign-in logic with username and password
         navigation.navigate('Home');
     };
 
@@ -31,58 +32,58 @@ const SignIn = ({ navigation }) => {
     }
     return (
         <TouchableWithoutFeedback onPress={handleKeyboardDismiss}>
-        <SafeAreaView style={{ flex: 1 }}>
-            <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                behavior={Platform.OS === 'ios' ? 'padding' : null}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
-            >
-                <View style={styles.container}>
-                    <Image source={require('../assets/images/logo.png')} />
+            <SafeAreaView style={{ flex: 1 }}>
+                <KeyboardAvoidingView
+                    style={{ flex: 1 }}
+                    behavior={Platform.OS === 'ios' ? 'padding' : null}
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
+                >
+                    <View style={styles.container}>
+                        <Image style={{width:200,height:200}} source={require('../assets/images/splashScreen.png')} />
 
-                    <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <View style={{ height: 50, borderColor: '#222222', borderBottomWidth: 2, width: '80%' }}>
-                            <Text style={styles.textStyle}>Sign in to Your Account</Text>
+                        <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <View style={{ height: 50, borderColor: '#222222', borderBottomWidth: 2, width: '80%' }}>
+                                <Text style={styles.textStyle}>Sign in to Your Account</Text>
+                            </View>
+
+                            <View style={styles.inputContainer}>
+                                <CustomInputText label={'User Name'} field={username} handlData={handleUsernameChange} />
+                                <PasswordInput
+                                    placeholder="Password"
+                                    onPasswordChange={handlePasswordChange}
+                                    field={password}
+                                />
+                            </View>
+
+                            <TouchableOpacity style={styles.loginBtn} onPress={handleSignIn}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image source={require('../assets/icons/loginIcon.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
+                                    <Text style={{ color: 'white', fontSize: 20 }}>Login</Text>
+                                </View>
+                                <Image source={require('../assets/icons/greaterThanWhite.png')} style={{ height: 15, width: 15, marginRight: 10 }} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.createAccountBtn} onPress={() => navigation.navigate('CreateAccount')}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image source={require('../assets/icons/user.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
+                                    <Text style={{ color: '#222222', fontSize: 20 }}>Create New Account</Text>
+                                </View>
+                                <Image source={require('../assets/icons/greaterThanBlack.png')} style={{ height: 15, width: 15, marginRight: 10 }} />
+                            </TouchableOpacity>
                         </View>
 
-                        <View style={styles.inputContainer}>
-                            <CustomInputText label={'User Name'} field={username} handlData={handleUsernameChange} />
-                            <PasswordInput
-                                placeholder="Password"
-                                onPasswordChange={handlePasswordChange}
-                                field={password}
-                            />
-                        </View>
-
-                        <TouchableOpacity style={styles.loginBtn} onPress={handleSignIn}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Image source={require('../assets/icons/loginIcon.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
-                                <Text style={{ color: 'white', fontSize: 20 }}>Login</Text>
-                            </View>
-                            <Image source={require('../assets/icons/greaterThanWhite.png')} style={{ height: 15, width: 15, marginRight: 10 }} />
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            onPress={() => navigation.navigate('ForgetPassword')}
+                            style={{ marginTop: 40 }}
+                        >
+                            <Text style={[{ color: '#222222', textDecorationLine: 'underline', fontSize: 15 }]}>Forget your password?</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.createAccountBtn} onPress={() => navigation.navigate('CreateAccount')}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Image source={require('../assets/icons/user.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
-                                <Text style={{ color: '#222222', fontSize: 20 }}>Create New Account</Text>
-                            </View>
-                            <Image source={require('../assets/icons/greaterThanBlack.png')} style={{ height: 15, width: 15, marginRight: 10 }} />
-                        </TouchableOpacity>
+                        <Text style={[{ color: '#222222', textAlign: 'center' }]}>By using this application, {'\n'}you accept to our <Text style={{ textDecorationLine: 'underline', fontWeight: 'bold' }}>Terms of Use.</Text></Text>
                     </View>
-
-                    <TouchableOpacity
-                        activeOpacity={1}
-                        onPress={() => navigation.navigate('ForgetPassword')}
-                        style={{ marginTop: 40 }}
-                    >
-                        <Text style={[{ color: '#222222', textDecorationLine: 'underline', fontSize: 15 }]}>Forget your password?</Text>
-                    </TouchableOpacity>
-
-                    <Text style={[{ color: '#222222', textAlign: 'center' }]}>By using this application, {'\n'}you accept to our <Text style={{ textDecorationLine: 'underline', fontWeight: 'bold' }}>Terms of Use.</Text></Text>
-                </View>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
         </TouchableWithoutFeedback >
     );
 };
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     loginBtn: {
         height: 70,
         width: '80%',
-        backgroundColor: '#222222',
+        backgroundColor: colors.blue,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

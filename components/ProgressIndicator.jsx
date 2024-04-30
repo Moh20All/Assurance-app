@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Image, Text, StyleSheet } from 'react-native';
-
+import colors from '../assets/Colors';
 
 const ProgressPoints = ({ nbrPage }) => {
     return (
@@ -35,7 +35,7 @@ const styles=StyleSheet.create({
         marginHorizontal: 5
     },
     activePoint: {
-        backgroundColor: '#E54F2C',
+        backgroundColor: colors.blue,
         marginHorizontal: 5
     },
 });

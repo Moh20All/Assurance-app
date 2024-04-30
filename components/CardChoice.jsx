@@ -1,16 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const CardChoice = ({navigation}) => {
-    const handleconfirm = ()=>{
-        navigation.navigate('Home');
-    };
-    const handlecancel= ()=>{
-        navigation.navigate('Companies');
-    };
+const CardChoice = ({ navigation }) => {
+  const handleconfirm = () => {
+    navigation.navigate('Home');
+  };
+  const handlecancel = () => {
+    navigation.navigate('Companies');
+  };
   return (
     <View style={styles.cardContainer}>
-        <Text style={styles.question}>si vous êtes déjà inscrit dans une compagnie d'assurance, cliquez sur confirmer pour remplir votre numéro d'assurance</Text>
+      <Text style={styles.question}>si vous êtes déjà inscrit dans une compagnie d'assurance,
+        cliquez sur confirmer pour remplir votre numéro d'assurance</Text>
       <TouchableOpacity style={styles.cardContent} onPress={handleconfirm}>
         <Text style={styles.text}>Confirm!</Text>
       </TouchableOpacity>
@@ -23,7 +24,7 @@ const CardChoice = ({navigation}) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width:'90%',
+    width: '90%',
     marginVertical: 10,
     marginHorizontal: 20,
     backgroundColor: '#fff',
@@ -41,17 +42,17 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     padding: 20,
-    marginTop:10,
-    backgroundColor:'#2B4BF2',
-    borderRadius:10
+    marginTop: 10,
+    backgroundColor: '#2B4BF2',
+    borderRadius: 10
   },
   cardcancel: {
     padding: 20,
-    marginTop:10,
-    backgroundColor:'#ffffff',
-    borderRadius:10,
-    borderColor:'rgba(21, 25, 32,0.4)',
-    borderWidth:3
+    marginTop: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    borderColor: 'rgba(21, 25, 32,0.4)',
+    borderWidth: 3
   },
   userName: {
     fontSize: 20,
@@ -62,24 +63,24 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   text: {
-    color:'white',
-    fontWeight:'bold',
-    textAlign:'center',
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
     fontSize: 18, // Adjust the font size as needed
     fontFamily: 'InterDisplay-Regular', // Specify your custom font family here
   },
   textcancel: {
-    color:'rgba(21,25,32,0.5)',
-    fontWeight:'bold',
-    textAlign:'center',
+    color: 'rgba(21,25,32,0.5)',
+    fontWeight: 'bold',
+    textAlign: 'center',
     fontSize: 18, // Adjust the font size as needed
     fontFamily: 'InterDisplay-Regular', // Specify your custom font family here
   },
-  question:{
-    color:'black',
-    textAlign:'center',
-    fontSize:19,
-    paddingBottom:8
+  question: {
+    color: 'black',
+    textAlign: 'center',
+    fontSize: 19,
+    paddingBottom: 8
   },
 });
 
