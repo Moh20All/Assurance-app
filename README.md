@@ -3,10 +3,11 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Contributers :
+
 Allali Mohamed Baha eddine 
 
 Kadri Riad
->>>>>>> 9a588d43adbac911f5dd476eb11e55ef527cf1ce
+9a588d43adbac911f5dd476eb11e55ef527cf1ce
 
 Tahraoui khaled Arclan
 
