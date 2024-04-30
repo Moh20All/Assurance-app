@@ -1,0 +1,196 @@
+
+{
+  "insuranceCompanies": [
+    {
+      "id": 1,
+      "name": "SAA",
+      "logo": "saa.jpg",
+      "offers": [
+        {
+          "id": 101,
+          "type": "Lâlla Insurance Pack",
+          "description": "The 'Lâlla Pack' is a contract dedicated to women with personalized insurance and assistance guarantees to accompany the female driver at all times.",
+          "guarantees": [
+            "Collision with another vehicle, whether identified or not.",
+            "Impact against a fixed or moving object.",
+            "Overturning without prior collision of the insured vehicle.",
+            "Damage caused by high water, floods, rockfalls, rockfalls, landslides, etc."
+          ],
+          "amount": 10000
+        },
+        {
+          "id": 102,
+          "type": "Third-party Auto Insurance Pack",
+          "description": "This auto insurance formula indemnifies material and bodily damages caused to third parties by your car.",
+          "guarantees": [
+            "Affordable guarantees covering the essentials.",
+            "Extended third-party insurance.",
+            "You can customize your insurance package according to your requirements."
+          ],
+          "amount": 20000
+        },
+        {
+          "id": 103,
+          "type": "Comprehensive Insurance Pack",
+          "description": "For peaceful driving, SAA offers you 'Comprehensive' insurance providing protection for your vehicle to keep it as good as new for as long as possible.",
+          "guarantees": [
+            "Collision with another vehicle, whether identified or not.",
+            "Impact against a fixed or moving object.",
+            "Overturning without prior collision of the insured vehicle.",
+            "Damage caused by high water, floods, rockfalls, rockfalls, landslides, hail, etc."
+          ],
+          "amount": 30000
+        },
+        {
+          "id": 104,
+          "type": "Tomobility Pack",
+          "description": "Discover the Tomobility pack, the all-inclusive vehicle insurance that covers you during your stay in Tunisia.",
+          "guarantees": [
+            "Damage insurance.",
+            "Breakdown Assistance.",
+            "Civil liability guarantee.",
+            "Legal protection."
+          ],
+          "amount": 100
+        }
+      ],
+      "amount": 40000
+    },
+    {
+      "id": 2,
+      "name": "CAAT",
+      "logo": "caat.png",
+      "offers": [
+        {
+          "type": "Vehicle Damages",
+          "description": ".",
+          "guarantees": [
+            "Collision with another vehicle, whether identified or not.",
+            "Impact against a fixed or moving object.",
+            "GLASS BREAKAGE"
+          ],
+          "amount": 10000
+        },
+        {
+          "type": "Third-party Damages",
+          "description": "Glass breakage.",
+          "guarantees": [
+            "Affordable guarantees covering the essentials.",
+            "Extended third-party insurance.",
+            "GLASS BREAKAGE",
+            "DEFENSE AND RECOURSE"
+          ],
+          "amount": 20000
+        },
+        {
+          "type": "Comprehensive",
+          "description": "Transported persons.",
+          "guarantees": [
+            "GLASS BREAKAGE",
+            "DEFENSE AND RECOURSE",
+            "TRANSPORTED PERSONS",
+            "VEHICLE THEFT AND FIRE"
+          ],
+          "amount": 80000
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "TRUST",
+      "logo": "trust.png",
+      "offers": [
+        {
+          "type": "Essential Pack",
+          "description": ".",
+          "guarantees": [
+            "Civil liability.",
+            "Defense & Recourse.",
+            "Collision Damage.",
+            "Transported persons."
+          ],
+          "amount": 3800
+        },
+        {
+          "type": "Comfort Pack",
+          "description": "Glass breakage.",
+          "guarantees": [
+            "Civil liability.",
+            "Defense & Recourse.",
+            "Glass Breakage.",
+            "Collision Damage.",
+            "Transported persons."
+          ],
+          "amount": 5200
+        },
+        {
+          "type": "Comfort + Pack",
+          "description": "Transported persons.",
+          "guarantees": [
+            "Civil liability.",
+            "Defense & Recourse.",
+            "Glass Breakage.",
+            "Theft & Fire.",
+            "Damage with or without Collisions Market Value.",
+            "Transported persons."
+          ],
+          "amount": 20000
+        },
+        {
+          "type": "Excellence Pack",
+          "description": "Transported persons.",
+          "guarantees": [
+            "Civil liability.",
+            "Defense & Recourse.",
+            "Glass Breakage.",
+            "Theft & Fire.",
+            "Damage with or without Collisions 'All risks'.",
+            "Transported persons."
+          ],
+          "amount": 30000
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "ALLIANCE",
+      "logo": "alliance.jpg",
+      "offers": [
+        {
+          "id": 501,
+          "type": "Basic",
+          "description": "Basic coverage",
+          "amount": 100
+        },
+        {
+          "id": 502,
+          "type": "Collision Damage",
+          "description": "Premium coverage",
+          "guarantees": [
+            "Glass Breakage.",
+            "Theft & Fire.",
+            "DASC",
+            "Accessory Theft.",
+            "Civil Liability",
+            "Defense and Recourse"
+          ],
+          "amount": 10000
+        },
+        {
+          "id": 503,
+          "type": "Comprehensive",
+          "description": "Premium coverage",
+          "guarantees": [
+            "Glass Breakage.",
+            "Theft & Fire.",
+            "DASC",
+            "Accessory Theft.",
+            "Civil Liability",
+            "Defense and Recourse"
+          ],
+          "amount": 21600
+        }
+      ]
+    }
+  ]
+}
