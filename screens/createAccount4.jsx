@@ -32,8 +32,7 @@ const CreateAccount4 = ({ navigation }) => {
         const enteredCode = code1 + code2 + code3 + code4;
 
         if (enteredCode === confirmationCode) {
-            Alert.alert("Welcome");
-            navigation.navigate("NextScreen");
+            navigation.navigate("SignIn");
         } else {
             Alert.alert("Invalid Confirmation Code", "Please enter the correct confirmation code.");
         }

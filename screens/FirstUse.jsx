@@ -7,7 +7,7 @@ const CardChoice = ({ navigation }) => {
        {yes?navigation.navigate('SignIn'):setYes(true) ;}
     };
     const handlecancel = () => {
-        {yes?navigation.navigate('Validate'):navigation.navigate('Companies') ;}
+        {yes? navigation.navigate('Companies',yes):navigation.navigate('Companies',yes) ;}
     };
     return (
         <SafeAreaView style={{ flex: 1 }}>

@@ -3,9 +3,16 @@ import { SafeAreaView, View, KeyboardAvoidingView, Text, Image, StyleSheet, Plat
 import CompanyCard from "../components/CompanyCard";
 import insuranceData from '../insuranceData.json';
 
-const Companies  = ({ navigation }) => {
+const Companies  = ({ navigation ,route}) => {
+    const haveAccount=route.params;
     const HandleClick = (id) => {
-        navigation.navigate("Offers", id);
+        if(haveAccount)
+        {
+            navigation.navigate("Validate");
+        }
+        else{
+             navigation.navigate("Offers", id);
+        }
     };
     
 
