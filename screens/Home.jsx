@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { View, SafeAreaView, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "../assets/Colors";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
-const Home = () => {
+
+
+const Home = ({ navigation }) => {
     const [firstName, setFirstName] = useState('Riad')
     const [lastName, setLastName] = useState('Kadri')
     const cardata = [
@@ -55,11 +59,11 @@ const Home = () => {
     }
     const renderItem = ({ item }) => {
         return (
-            <View style={[styles.itemContainer]}>
+            <View style={[styles.itemContainer,styles.boxShadow]}>
                 <View style={styles.textContainer}>
                     <Text style={styles.itemId}>{item.id}</Text>
                     <Text style={{ fontSize: 15, fontWeight: 'bold', color: calculateDateColor(item.dateExp) }}>
-                        {item.expired ? `Insurance Expired\n${item.dateExp.toLocaleDateString()}` : `Time Left: ${calculateTimeLeft(item.dateExp).days} days`}
+                        {calculateTimeLeft(item.dateExp).days <= 0 ? `Insurance Expired\n${item.dateExp.toLocaleDateString()}` : `Time Left: ${calculateTimeLeft(item.dateExp).days} days`}
                     </Text>
                 </View>
                 <View style={styles.buttonContainer}>
@@ -76,24 +80,15 @@ const Home = () => {
     return (
         <SafeAreaView style={styles.safeAreaView}>
             <View style={styles.container}>
-                <View style={[styles.header, styles.boxShadow]}>
-                    <View style={styles.headerTextContainer}>
-                        <Text style={styles.headerTextBold}>Dashboard</Text>
-                    </View>
-    
-                    <View style={styles.headerIconsContainer}>
-                        <Image source={require('../assets/icons/phone-call.png')} style={styles.headerIcons}/>
-                        <Image  source={require('../assets/icons/profileSettings.png')} style={styles.headerIcons} />
-                    </View>
-                </View>
-    
+                <Header pageName={"Dashboard"}/>
+
                 <View style={styles.userData}>
-                    <Image style={{width:80,height:100}} source={require('../assets/images/large-removebg.png')} />
+                    <Image style={{ width: 50, height: 70 }} resizeMethod='resize' resizeMode='contain' source={require('../assets/images/large-removebg.png')} />
                     <View style={styles.userDataTextContainer}>
-                        <Text style={styles.userDataText}>Welcome {firstName} {lastName}</Text>
+                        <Text style={styles.userDataText}>Welcome to Relio<Text style={{color:colors.blue,fontSize:25}}> {firstName}</Text> </Text>
                     </View>
                 </View>
-    
+
                 <View style={styles.iconContainer}>
                     <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(1)}>
                         <View style={styles.iconBadge}>
@@ -114,7 +109,7 @@ const Home = () => {
                         <Image style={styles.iconImage} source={require('../assets/icons/motorbike.png')} />
                     </TouchableOpacity>
                 </View>
-    
+
                 <View style={styles.flatListContainer}>
                     <FlatList
                         data={data}
@@ -122,52 +117,27 @@ const Home = () => {
                         renderItem={renderItem}
                     />
 
-                <TouchableOpacity style={styles.bottomButton}>
-                    <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
-                    <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
-                    <Image source={require("../assets/icons/greaterThanWhite.png")} />
-                </TouchableOpacity>
-                </View>
-    
-    
-                <View style={styles.footer}>
-                    <TouchableOpacity style={styles.footerButton}>
-                        <Image source={require('../assets/icons/hut.png')} style={styles.footerImg} />
-                        <Text style={styles.footerButtonText}>Dashboard</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.footerButton}>
-                        <Image source={require('../assets/icons/car-insurance.png')} style={styles.footerImg} />
-                        <Text style={styles.footerButtonText}>Insurances</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.footerButton}>
-                        <Image source={require('../assets/icons/fender-bender.png')} style={styles.footerImg} />
-                        <Text style={styles.footerButtonText}>Claims</Text>
+                    <TouchableOpacity style={styles.bottomButton} onPress={() => navigation.navigate('Companies', false)}>
+                        <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
+                        <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
+                        <Image source={require("../assets/icons/greaterThanWhite.png")} />
                     </TouchableOpacity>
                 </View>
-    
+                <Footer navigation={navigation}/>
             </View>
         </SafeAreaView>
     );
-    
+
 };
 
 const styles = StyleSheet.create({
     safeAreaView: {
         flex: 1,
-        fontFamily:'InterDisplay-Regular'
+        fontFamily: 'InterDisplay-Regular'
     },
     container: {
         flex: 1,
         alignItems: 'center',
-    },
-    header: {
-        width: '100%',
-        height: 50,
-        flexDirection: 'row',
-        paddingHorizontal:10,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: '#FFFF',
     },
     boxShadow: {
         shadowColor: '#222222',
@@ -178,28 +148,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.6,
         shadowRadius: 6,
         elevation: 10,
-    },
-    headerTextContainer: {
-        flexDirection: 'column',
-    },
-    headerText: {
-        fontSize: 16,
-    },
-    headerTextBold: {
-        color: '#222222',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    headerIconsContainer: {
-        flexDirection: 'row',
-        width: '15%',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap:5
-    },
-    headerIcons:{
-        width:25,
-        height:25
     },
     userData: {
         width: '100%',
@@ -249,8 +197,9 @@ const styles = StyleSheet.create({
     },
     flatListContainer: {
         flex: 1,
-        width: '88%',
+        width: '100%',
         alignItems: 'center',
+        marginHorizontal:10,
         justifyContent: 'center',
         marginBottom: 140
     },
@@ -283,7 +232,7 @@ const styles = StyleSheet.create({
     settingsButton: {
         borderRadius: 50,
         padding: 3,
-        borderWidth:1
+        borderWidth: 1
     },
     renewButton: {
         borderRadius: 10,
@@ -306,46 +255,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: 20,
-        marginBottom: -70, // Adjust this value as needed
+        marginBottom: -70, 
         borderRadius: 10,
         gap: 5,
-        marginTop: 10 // Adjust this value as needed
+        marginTop: 10
     },
-    
-    addicon:{
-        width:20,
-        height:20,
-        
+
+    addicon: {
+        width: 20,
+        height: 20,
+
     },
     bottomButtonText: {
         color: '#FFF',
         fontSize: 20
-    },
-    footer: {
-        width: '100%',
-        height: 50,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        position: 'absolute',
-        bottom: 3,
-        backgroundColor: '#FFF',
-    },
-    footerButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRightColor: '#222222',
-        borderRightWidth: 1,
-        width: '33%',
-        height: '80%'
-    },
-    footerButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#222222'
-    },
-    footerImg:{
-        transform: [{ scale: 0.6 }]
     },
 });
 export default Home;

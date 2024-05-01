@@ -24,8 +24,43 @@ const SignIn = ({ navigation }) => {
     };
 
     const handleSignIn = () => {
-        navigation.navigate('Home');
+        // Construct the request body
+        const requestBody = {
+            email: username,
+            password: password
+        };
+    
+        fetch('http://10.0.2.2:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle response data
+            console.log('Response:', data);
+            // Assuming the server responds with a success message or user data
+            if (data.success) {
+                // Navigate to the Home screen or any other screen as needed
+                navigation.navigate('Home');
+            } else {
+                // Handle authentication failure (e.g., display an error message)
+                alert(data.message); // Show error message returned from the server
+            }
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error);
+        });
     };
+    
 
     const handleKeyboardDismiss = () => {
         Keyboard.dismiss()
