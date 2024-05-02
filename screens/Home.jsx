@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, SafeAreaView, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "../assets/Colors";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-
-
 const Home = ({ route }) => {
-    const { isValid } = route.params;
+    const { isValid, id } = route.params;
+    const [firstName, setFirstName] = useState('Riad');
+    const [lastName, setLastName] = useState('Kadri');
+    const [data, setData] = useState([]);
 
-    const [firstName, setFirstName] = useState('Riad')
-    const [lastName, setLastName] = useState('Kadri')
     const cardata = [
         { id: 'Gdd-98DFD', expired: true, dateExp: new Date(2023, 3, 23) },
         { id: 'Gdd-BD-776X8', expired: false, dateExp: new Date(2024, 4, 1) },
@@ -18,14 +17,56 @@ const Home = ({ route }) => {
         { id: 'Gdd-CD-776X8', expired: false, dateExp: new Date(2024, 4, 1) },
         { id: 'Gdd-978DFD', expired: false, dateExp: new Date(2025, 3, 23) }
     ];
+
     const truckdata = [
         { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) }
     ];
+
     const motordata = [
         { id: 'Gdd-98DFD', expired: true, dateExp: new Date(2023, 3, 23) },
         { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) }
     ];
-    const [data, setData] = useState(cardata);
+    const fetchAssureDetails = (ass_id) => {
+        return new Promise((resolve, reject) => {
+          fetch(`http://10.0.2.2:3000/assure-details?ass_id=${ass_id}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              resolve(data);
+            })
+            .catch(error => {
+              reject(error);
+            });
+        });
+      };
+      
+      // Example usage
+      const ass_id = '5478291032'; // Replace with the actual ass_id
+      fetchAssureDetails(ass_id)
+        .then(data => {
+          console.log('Assurance details:', data);
+          // Handle the returned data
+        })
+        .catch(error => {
+          // Handle errors
+        });
+      
+    useEffect(() => {
+        fetchAssureDetails(id)
+            .then(data => {
+                console.log('Assurance details:', data);
+                // Update state with fetched data
+                setData(data.data);
+            })
+            .catch(error => {
+                console.error('Error fetching assurance details:', error);
+                // Handle errors
+            });
+    }, [id]);
 
     const handleData = (x) => {
         if (x == 1) {
@@ -37,7 +78,8 @@ const Home = ({ route }) => {
         else if (x == 3) {
             setData(motordata);
         }
-    }
+    };
+
     const calculateDateColor = (expirationDate) => {
         const today = new Date();
         const differenceInDays = Math.floor((expirationDate - today) / (1000 * 60 * 60 * 24));
@@ -50,6 +92,7 @@ const Home = ({ route }) => {
             return 'green'; // More than 7 days remaining
         }
     };
+
     const calculateTimeLeft = (expDate) => {
         const today = new Date();
         const differenceInMilliseconds = expDate - today;
@@ -58,10 +101,11 @@ const Home = ({ route }) => {
         return {
             days: daysLeft,
         };
-    }
+    };
+
     const renderItem = ({ item }) => {
         return (
-            <View style={[styles.itemContainer,styles.boxShadow]}>
+            <View style={[styles.itemContainer, styles.boxShadow]}>
                 <View style={styles.textContainer}>
                     <Text style={styles.itemId}>{item.id}</Text>
                     <Text style={{ fontSize: 15, fontWeight: 'bold', color: calculateDateColor(item.dateExp) }}>
@@ -77,59 +121,64 @@ const Home = ({ route }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        )
+        );
     };
+
     return (
         <SafeAreaView style={styles.safeAreaView}>
             <View style={styles.container}>
-                <Header pageName={"Dashboard"}/>
+                <Header pageName={"Dashboard"} route={route} />
 
                 <View style={styles.userData}>
                     <Image style={{ width: 50, height: 70 }} resizeMethod='resize' resizeMode='contain' source={require('../assets/images/large-removebg.png')} />
                     <View style={styles.userDataTextContainer}>
-                        <Text style={styles.userDataText}>Welcome to Relio<Text style={{color:colors.blue,fontSize:25}}> {firstName}</Text> </Text>
+                        <Text style={styles.userDataText}>Welcome to Relio<Text style={{ color: colors.blue, fontSize: 25 }}> {firstName}</Text> </Text>
                     </View>
                 </View>
 
-                <View style={styles.iconContainer}>
-                    <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(1)}>
-                        <View style={styles.iconBadge}>
-                            <Text style={styles.iconBadgeText}>{cardata.length}</Text>
+                {isValid ? (
+                    <View>
+                        <View style={styles.iconContainer}>
+                            <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(1)}>
+                                <View style={styles.iconBadge}>
+                                    <Text style={styles.iconBadgeText}>{cardata.length}</Text>
+                                </View>
+                                <Image style={styles.iconImage} source={require('../assets/icons/car.png')} />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(2)}>
+                                <View style={styles.iconBadge}>
+                                    <Text style={styles.iconBadgeText}>{truckdata.length}</Text>
+                                </View>
+                                <Image style={styles.iconImage} source={require('../assets/icons/truck.png')} />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.icon]} onPress={() => handleData(3)}>
+                                <View style={styles.iconBadge}>
+                                    <Text style={styles.iconBadgeText}>{motordata.length}</Text>
+                                </View>
+                                <Image style={styles.iconImage} source={require('../assets/icons/motorbike.png')} />
+                            </TouchableOpacity>
                         </View>
-                        <Image style={styles.iconImage} source={require('../assets/icons/car.png')} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(2)}>
-                        <View style={styles.iconBadge}>
-                            <Text style={styles.iconBadgeText}>{truckdata.length}</Text>
-                        </View>
-                        <Image style={styles.iconImage} source={require('../assets/icons/truck.png')} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.icon]} onPress={() => handleData(3)}>
-                        <View style={styles.iconBadge}>
-                            <Text style={styles.iconBadgeText}>{motordata.length}</Text>
-                        </View>
-                        <Image style={styles.iconImage} source={require('../assets/icons/motorbike.png')} />
-                    </TouchableOpacity>
-                </View>
 
-                <View style={styles.flatListContainer}>
-                    <FlatList
-                        data={data}
-                        keyExtractor={item => item.id}
-                        renderItem={renderItem}
-                    />
+                        <View style={styles.flatListContainer}>
+                            <FlatList
+                                data={data}
+                                keyExtractor={item => item.id}
+                                renderItem={renderItem}
+                            />
 
-                    <TouchableOpacity style={styles.bottomButton} onPress={() => navigation.navigate('Companies', false)}>
-                        <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
-                        <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
-                        <Image source={require("../assets/icons/greaterThanWhite.png")} />
-                    </TouchableOpacity>
-                </View>
-                <Footer navigation={route}/>
+                            <TouchableOpacity style={styles.bottomButton} onPress={() => navigation.navigate('Companies', false)}>
+                                <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
+                                <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
+                                <Image source={require("../assets/icons/greaterThanWhite.png")} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                ) : null}
+
+                <Footer navigation={route} />
             </View>
         </SafeAreaView>
     );
-
 };
 
 const styles = StyleSheet.create({
@@ -201,7 +250,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
-        marginHorizontal:10,
+        marginHorizontal: 10,
         justifyContent: 'center',
         marginBottom: 140
     },
@@ -225,7 +274,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#222222'
     },
-
     buttonContainer: {
         flexDirection: 'row',
         width: '40%',
@@ -257,20 +305,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: 20,
-        marginBottom: -70, 
+        marginBottom: -70,
         borderRadius: 10,
         gap: 5,
         marginTop: 10
     },
-
     addicon: {
         width: 20,
         height: 20,
-
     },
     bottomButtonText: {
         color: '#FFF',
         fontSize: 20
     },
 });
+
 export default Home;

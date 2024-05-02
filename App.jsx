@@ -10,6 +10,8 @@ import CreateAccount4 from './screens/createAccount4';
 import Offers from './screens/Offers';
 import Home from './screens/home';
 import FirstUse from './screens/FirstUse'
+import Profile from './screens/Profile'
+
 const Stack = createNativeStackNavigator();
 const App = ()=>{
   return(
@@ -22,6 +24,7 @@ const App = ()=>{
       <Stack.Screen component={Companies} name={'Companies'} options={{headerShown:false}} />
       <Stack.Screen component={Offers} name="Offers" options={{headerShown:false}} />
       <Stack.Screen component={CreateAccount4} name={'Page4'} options={{headerShown:false}} />
+      <Stack.Screen component={Profile} name={'Profile'} options={{headerShown:false}} />
       <Stack.Screen
           name="Home"
           component={Home}

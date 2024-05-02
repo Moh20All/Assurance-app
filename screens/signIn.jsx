@@ -51,9 +51,9 @@ const SignIn = ({ navigation }) => {
                 .then(response => response.json())
                 .then(assureCompteData => {
                     if (assureCompteData.success) {
-                        navigation.navigate('Home', { isValid: true });
+                        navigation.navigate('Home', { isValid: true ,id:data.user.user_id});
                     } else {
-                        navigation.navigate('Home', { isValid: false });
+                        navigation.navigate('Home', { isValid: false ,id:null});
                     }
                 })
                 .catch(error => {
