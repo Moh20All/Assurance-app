@@ -44,22 +44,31 @@ const SignIn = ({ navigation }) => {
             return response.json();
         })
         .then(data => {
-            // Handle response data
             console.log('Response:', data);
-            // Assuming the server responds with a success message or user data
             if (data.success) {
-                // Navigate to the Home screen or any other screen as needed
-                navigation.navigate('Home');
+                // Check if the user exists in assure_compte table
+                fetch(`http://10.0.2.2:3000/check-assured/${data.user.user_id}`)
+                .then(response => response.json())
+                .then(assureCompteData => {
+                    if (assureCompteData.success) {
+                        navigation.navigate('Home', { isValid: true });
+                    } else {
+                        navigation.navigate('Home', { isValid: false });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking assure_compte:', error);
+                });
             } else {
                 // Handle authentication failure (e.g., display an error message)
                 alert(data.message); // Show error message returned from the server
             }
         })
         .catch(error => {
-            // Handle errors
             console.error('Error:', error);
         });
     };
+    
     
 
     const handleKeyboardDismiss = () => {

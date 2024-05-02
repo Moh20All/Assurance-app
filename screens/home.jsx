@@ -6,7 +6,9 @@ import Footer from "../components/Footer";
 
 
 
-const Home = ({ navigation }) => {
+const Home = ({ route }) => {
+    const { isValid } = route.params;
+
     const [firstName, setFirstName] = useState('Riad')
     const [lastName, setLastName] = useState('Kadri')
     const cardata = [
@@ -123,7 +125,7 @@ const Home = ({ navigation }) => {
                         <Image source={require("../assets/icons/greaterThanWhite.png")} />
                     </TouchableOpacity>
                 </View>
-                <Footer navigation={navigation}/>
+                <Footer navigation={route}/>
             </View>
         </SafeAreaView>
     );
