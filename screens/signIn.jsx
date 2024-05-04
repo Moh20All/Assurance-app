@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, Image, TouchableWithoutFeedback, TouchableOpacity, Keyboard } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, Image, TouchableWithoutFeedback, TouchableOpacity, Keyboard, ActivityIndicator } from "react-native";
 import PasswordInput from "../components/PasswordInput";
 import CustomInputText from "../components/CustomInputText";
 import colors from "../assets/Colors";
@@ -8,6 +8,9 @@ import colors from "../assets/Colors";
 const SignIn = ({ navigation }) => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState("");
+    const [user, setUser] = useState(true);
+    const [pass, setPass] = useState(true);
+    const [show, setShow] = useState(false)
     const handleUsernameChange = (text) => {
         if (text.length == 0) {
             setUsername(null)
@@ -25,11 +28,12 @@ const SignIn = ({ navigation }) => {
 
     const handleSignIn = () => {
         // Construct the request body
+        setShow(true); // Toggling show state before the fetch request
         const requestBody = {
             email: username,
             password: password
         };
-    
+
         fetch('http://10.0.2.2:3000/login', {
             method: 'POST',
             headers: {
@@ -37,39 +41,61 @@ const SignIn = ({ navigation }) => {
             },
             body: JSON.stringify(requestBody),
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Response:', data);
-            if (data.success) {
-                // Check if the user exists in assure_compte table
-                fetch(`http://10.0.2.2:3000/check-assured/${data.user.user_id}`)
-                .then(response => response.json())
-                .then(assureCompteData => {
-                    if (assureCompteData.success) {
-                        navigation.navigate('Home', { isValid: true ,id:data.user.user_id});
-                    } else {
-                        navigation.navigate('Home', { isValid: false ,id:null});
-                    }
-                })
-                .catch(error => {
-                    console.error('Error checking assure_compte:', error);
-                });
-            } else {
-                // Handle authentication failure (e.g., display an error message)
-                alert(data.message); // Show error message returned from the server
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    setUser(false);
+                    setPass(false);
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response:', data);
+                if (data.success) {
+                    console.log(data.user.user_id)
+                    fetch(`http://10.0.2.2:3000/check-assured/${data.user.user_id}`)
+                        .then(response => response.json())
+                        .then(assureCompteData => {
+                            if (assureCompteData.success) {
+                                setShow(false)
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Home',params: {
+                                        userId: data.user.user_id,
+                                        isValid: true
+                                    }}],
+                                });
+
+                            } else {
+                                setShow(false);
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Home',params: {
+                                        userId: data.user.user_id,
+                                        isValid: false
+                                    } }],
+                                });
+                                // Toggling show state after successful response
+                            }
+                        })
+                        .catch(error => {
+                            user = false; pass = false;
+                            console.error('Error checking assure_compte:', error);
+                            setShow(false); // Toggling show state after catch block
+                        });
+                } else {
+                    setUser(false);
+                    setPass(false);
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                setShow(false); // Toggling show state after catch block
+            });
+        setShow(false); // This line will execute before the fetch request completes
     };
-    
-    
+
 
     const handleKeyboardDismiss = () => {
         Keyboard.dismiss()
@@ -82,8 +108,8 @@ const SignIn = ({ navigation }) => {
                     behavior={Platform.OS === 'ios' ? 'padding' : null}
                     keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
                 >
-                    <View style={styles.container}>
-                        <Image style={{width:200,height:200}} source={require('../assets/images/splashScreen.png')} />
+                    {show ? <ActivityIndicator size={'large'} /> : <View style={styles.container}>
+                        <Image style={{ width: 200, height: 200 }} source={require('../assets/images/splashScreen.png')} />
 
                         <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
                             <View style={{ height: 50, borderColor: '#222222', borderBottomWidth: 2, width: '80%' }}>
@@ -91,11 +117,11 @@ const SignIn = ({ navigation }) => {
                             </View>
 
                             <View style={styles.inputContainer}>
-                                <CustomInputText label={'User Name'} field={username} handlData={handleUsernameChange} />
+                                <CustomInputText label={'User Name'} field={user} handlData={handleUsernameChange} />
                                 <PasswordInput
                                     placeholder="Password"
                                     onPasswordChange={handlePasswordChange}
-                                    field={password}
+                                    field={pass}
                                 />
                             </View>
 
@@ -125,7 +151,7 @@ const SignIn = ({ navigation }) => {
                         </TouchableOpacity>
 
                         <Text style={[{ color: '#222222', textAlign: 'center' }]}>By using this application, {'\n'}you accept to our <Text style={{ textDecorationLine: 'underline', fontWeight: 'bold' }}>Terms of Use.</Text></Text>
-                    </View>
+                    </View>}
                 </KeyboardAvoidingView>
             </SafeAreaView>
         </TouchableWithoutFeedback >

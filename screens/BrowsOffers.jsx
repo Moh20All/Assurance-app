@@ -46,9 +46,6 @@ const Brows = ({ route ,navigation}) => {
             </Modal>
         );
     };
-    const handlePress=()=>{
-
-    }
     const renderItem = ({ item }) => (
         <View style={styles.item}>
             <Image source={imgUrl()} resizeMode='cover' style={{ width: '100%', height: 200 }} />
