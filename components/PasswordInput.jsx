@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { View, TextInput, TouchableOpacity, Image, StyleSheet, Animated,Text } from "react-native";
 
-const PasswordInput = ({ placeholder, onPasswordChange }) => {
+const PasswordInput = ({ placeholder, onPasswordChange,field }) => {
     const [passwordVisible, setPasswordVisible] = useState(true);
     const [valide, setValid] = useState(false);
     const [empty,setEmpty]=useState(true)
@@ -49,7 +49,7 @@ const PasswordInput = ({ placeholder, onPasswordChange }) => {
         }
     }
     return (
-        <View style={[styles.container, styles.boxShadow, { borderColor: valide ? 'green' : 'red', }]}>
+        <View style={[styles.container, styles.boxShadow, { borderColor: field ? 'black' : 'red', }]}>
             <Animated.View  style={[styles.textStyle, {
                 transform: [
                     { translateY: transY.current },

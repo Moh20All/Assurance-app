@@ -31,7 +31,7 @@ const CustomInputText = ({ field, label, handlData, contentType }) => {
 
     }
     return (
-        <View style={[styles.inputTextStyle, styles.boxShadow, { borderBottomColor: field ? 'green' : 'red' }]}>
+        <View style={[styles.inputTextStyle, styles.boxShadow, { borderBottomColor: field ? 'black' : 'red' }]}>
             <Animated.View style={[styles.textStyle, {
                 transform: [
                     { translateY: transY.current },

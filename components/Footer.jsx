@@ -10,9 +10,9 @@ const Footer = ({navigation}) => {
                 <Image source={require('../assets/icons/hut.png')} style={styles.footerImg} />
                 <Text style={styles.footerButtonText}>Dashboard</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton}>
+            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('OffersDisplay')}>
                 <Image source={require('../assets/icons/car-insurance.png')} style={styles.footerImg} />
-                <Text style={styles.footerButtonText}>Insurances</Text>
+                <Text style={styles.footerButtonText}>Offers</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.footerButton}>
                 <Image source={require('../assets/icons/fender-bender.png')} style={styles.footerImg} />
