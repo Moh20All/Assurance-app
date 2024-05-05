@@ -5,22 +5,24 @@ import colors from '../assets/Colors';
 const ProgressPoints = ({ nbrPage }) => {
     return (
         <View style={[styles.progressIndicator]}>
+
+
             <TouchableOpacity>
-                <View style={[styles.progressPoint,nbrPage==1 && styles.activePoint]} />
+                <View style={[styles.progressPoint, nbrPage == 1 && styles.activePoint]} />
             </TouchableOpacity>
             <TouchableOpacity>
-                <View style={[styles.progressPoint,nbrPage==2 && styles.activePoint]} />
+                <View style={[styles.progressPoint, nbrPage == 2 && styles.activePoint]} />
             </TouchableOpacity>
             <TouchableOpacity>
-                <View style={[styles.progressPoint,nbrPage==3 && styles.activePoint]} />
+                <View style={[styles.progressPoint, nbrPage == 3 && styles.activePoint]} />
             </TouchableOpacity>
             <TouchableOpacity>
-                <View style={[styles.progressPoint,nbrPage==4 && styles.activePoint]} />
+                <View style={[styles.progressPoint, nbrPage == 4 && styles.activePoint]} />
             </TouchableOpacity>
         </View>
     );
 }
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
     progressIndicator: {
         flexDirection: 'row',
         justifyContent: 'space-between',

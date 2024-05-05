@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView ,Image} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import colors from '../assets/Colors';
 const CardChoice = ({ navigation }) => {
-    const [yes,setYes]=useState(false);
+    const [yes, setYes] = useState(false);
     const handleconfirm = () => {
-       {yes?navigation.navigate('SignIn'):setYes(true) ;}
+        { yes ? navigation.navigate('SignIn') : setYes(true); }
     };
     const handlecancel = () => {
-        {yes? navigation.navigate('Companies',yes):navigation.navigate('Companies',yes) ;}
+        { yes ? navigation.navigate('Companies', yes) : navigation.navigate('Companies', yes); }
     };
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
-                <Image source={require('../assets/images/firstUse.jpg')} style={{width:'100%',height:'40%'}}/>
+                <Image source={require('../assets/images/firstUse.jpg')} style={{ width: '100%', height: '40%' }} />
                 <View style={styles.cardContainer}>
-                   {yes? <Text style={styles.question}>Do you have Relio account ?</Text> : 
-                  <Text style={styles.question}>Do you have a valide insurance number Do you have Relio account ?</Text>}
+                    {yes ? <Text style={styles.question}>Do you have Relio account ?</Text> :
+                        <Text style={styles.question}>Do you have a valide insurance number?</Text>}
                     <View>
-                    <TouchableOpacity style={styles.cardContent} onPress={handleconfirm}>
+                        <TouchableOpacity style={styles.cardContent} onPress={handleconfirm}>
                             <Text style={styles.text}>Yes</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.cardcancel} onPress={handlecancel}>
@@ -33,11 +33,11 @@ const CardChoice = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        alignItems:'center',
-        backgroundColor:'#FFF',
-        justifyContent:'center'
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        justifyContent: 'center'
     },
     cardContainer: {
         width: '90%',

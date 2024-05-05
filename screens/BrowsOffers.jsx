@@ -3,14 +3,18 @@ import { SafeAreaView, View, StyleSheet, FlatList, Text, Image, TouchableOpacity
 import insuranceData from '../insuranceData.json'; // Import JSON data
 import colors from "../assets/Colors";
 import { PanResponder } from "react-native";
+import { isEnabled } from "react-native/Libraries/Performance/Systrace";
+import UploadDocuments from "../components/UploadDocuments";
+import NextBtn from "../components/NextBtn";
 
-
-
-const Brows = ({ route ,navigation}) => {
+const Brows = ({ route, navigation }) => {
     const idcmp = route.params;
+    const signed = route.params;
     const [visibleModal, setVisible] = useState(false);
     const [offer, setOffer] = useState([]);
-
+    const [documentPicker, setDocumentPicker] = useState(false);
+    const [drivingLicense, setDrivingLicense] = useState(null);
+    const [carDocument, setCarDocument] = useState(null);
     const filteredInsuranceCompanies = insuranceData.insuranceCompanies.filter(company => company.id === idcmp);
 
     const imgUrl = () => {
@@ -30,7 +34,35 @@ const Brows = ({ route ,navigation}) => {
             }
         },
     });
+    const handleOfferSelection = () => {
+        if (!signed) {
+            navigation.navigate('CreateAccount', { idcmp: idcmp, offerid: offer.id })
+        } else {
+            setDocumentPicker(true)
+        }
+    }
 
+    const handleDrivingLicenseUpload = async () => {
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
+            });
+            setDrivingLicense(res);
+        } catch (err) {
+            console.error('Error picking driving license:', err);
+        }
+    };
+
+    const handleCarDocumentUpload = async () => {
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
+            });
+            setCarDocument(res);
+        } catch (err) {
+            console.error('Error picking car document:', err);
+        }
+    };
     const OfferModal = ({ offer, visible, onClose }) => {
         return (
             <Modal visible={visible} animationType='slide' transparent={true}>
@@ -59,7 +91,7 @@ const Brows = ({ route ,navigation}) => {
                             paddingHorizontal: 20, height: 70, alignItems: 'center', flexDirection: 'row',
                             justifyContent: 'space-between'
                         }, styles.boxShadow]}
-                        onPress={()=>{navigation.navigate('CreateAccount',{idcmp:idcmp,offerid:offer.id})}}
+                        onPress={handleOfferSelection}
                     >
                         <View style={{ width: '80%' }} >
                             <Text style={{ color: colors.textColor, fontSize: 16, fontWeight: 'bold' }}>{offer.type}</Text>
@@ -85,6 +117,28 @@ const Brows = ({ route ,navigation}) => {
                     style={{ width: '100%' }}
                 />
                 <OfferModal offer={offer} visible={visibleModal} onClose={() => setVisible(false)} />
+
+                <Modal visible={documentPicker} animationType='fade' transparent={true}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <View style={[styles.modalContent, styles.boxShadow]}>
+                            <Image style={{ width: 250, height: 250 }} source={require('../assets/images/splashScreen.png')} />
+
+                            <View style={{width:'100%',marginVertical:20}}>
+                                <UploadDocuments handleDrivingLicenseUpload={handleDrivingLicenseUpload}
+                                    handleCarDocumentUpload={handleCarDocumentUpload}
+                                    drivingLicense={drivingLicense}
+                                    carDocument={carDocument}
+                                />
+                            </View>
+                            <NextBtn handleButton={() => {
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Home' }]
+                                })
+                            }} value={"Demand"} />
+                        </View>
+                    </View>
+                </Modal>
             </View>
         </SafeAreaView>
     );
@@ -121,6 +175,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.6,
         shadowRadius: 6,
         elevation: 10,
+    },
+    modalContent: {
+        width: '80%',
+        paddingVertical: 20,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
     },
 });
 

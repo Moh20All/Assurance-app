@@ -8,10 +8,10 @@ const Companies  = ({ navigation ,route}) => {
     const HandleClick = (id) => {
         if(haveAccount)
         {
-            navigation.navigate("Validate");
+            navigation.navigate("Validate",{Company:id});
         }
         else{
-             navigation.navigate("Offers", id);
+             navigation.navigate("Offers",{idcmp:id});
         }
     };
     
@@ -33,7 +33,7 @@ const Companies  = ({ navigation ,route}) => {
                     <FlatList
                     data={insuranceData.insuranceCompanies}
                     renderItem={renderItem}
-                    keyExtractor={(item) => { item.id.toString() }}
+                    keyExtractor={(item) => {item.id}}
                 />
                 </View>
                

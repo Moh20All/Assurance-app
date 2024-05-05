@@ -60,20 +60,24 @@ const SignIn = ({ navigation }) => {
                                 setShow(false)
                                 navigation.reset({
                                     index: 0,
-                                    routes: [{ name: 'Home',params: {
-                                        userId: data.user.user_id,
-                                        isValid: true
-                                    }}],
+                                    routes: [{
+                                        name: 'Home', params: {
+                                            userId: data.user.user_id,
+                                            isValid: true
+                                        }
+                                    }],
                                 });
 
                             } else {
                                 setShow(false);
                                 navigation.reset({
                                     index: 0,
-                                    routes: [{ name: 'Home',params: {
-                                        userId: data.user.user_id,
-                                        isValid: false
-                                    } }],
+                                    routes: [{
+                                        name: 'Home', params: {
+                                            userId: data.user.user_id,
+                                            isValid: false
+                                        }
+                                    }],
                                 });
                                 // Toggling show state after successful response
                             }

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
 
-const Header = ({ pageName }) => {
+const Header = ({ pageName , profile}) => {
     return (
         <View style={[styles.header, styles.boxShadow]}>
             <View style={styles.headerTextContainer}>
@@ -10,10 +10,10 @@ const Header = ({ pageName }) => {
             </View>
 
             <View style={styles.headerIconsContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity >
                     <Image source={require('../assets/icons/notification.png')} style={styles.headerIcons} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={profile}>
                     <Image source={require('../assets/icons/profileSettings.png')} style={styles.headerIcons} />
                 </TouchableOpacity>
             </View>

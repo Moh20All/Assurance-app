@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, KeyboardAvoidingView, Text, Image, StyleSheet, Platform, TouchableOpacity, Button, Alert } from "react-native";
 import DocumentPicker from 'react-native-document-picker';
 import NextBtn from "../components/NextBtn";
 import ProgressPoints from "../components/ProgressIndicator";
-
-const CreateAccount2 = ({ navigation }) => {
+import UploadDocuments from "../components/UploadDocuments";
+const CreateAccount2 = ({ navigation, route }) => {
     const [drivingLicense, setDrivingLicense] = useState(null);
     const [carDocument, setCarDocument] = useState(null);
+    const { firstName, lastName, selectedDate, idcmp, offerid } = route.params;
+
 
     const handleDrivingLicenseUpload = async () => {
         try {
@@ -35,7 +37,8 @@ const CreateAccount2 = ({ navigation }) => {
         if (drivingLicense == null || carDocument == null) {
             Alert.alert('Fill the necessary Fields', 'Please upload your driving license and car document');
         } else {
-            navigation.navigate('Page3');
+            navigation.navigate('Page3', { firstName, lastName, selectedDate, idcmp, offerid, drivingLicense, carDocument });
+
         }
     };
 
@@ -48,24 +51,11 @@ const CreateAccount2 = ({ navigation }) => {
             >
                 <View style={styles.container}>
                     <Image style={{ width: 250, height: 250 }} source={require('../assets/images/upload.jpg')} />
-                    <View style={{width:'100%',alignItems:'center'}}>
-                        <TouchableOpacity style={[styles.uploadButton, styles.boxShadow]} onPress={handleDrivingLicenseUpload}>
-                            <Text style={styles.uploadButtonText}>Upload Driving License</Text>
-                        </TouchableOpacity>
-                        {drivingLicense && (
-                            <Text>{drivingLicense[0].name}</Text>
-                        )}
-                    </View>
-                    <View style={{width:'100%',alignItems:'center'}}>
-                        <TouchableOpacity style={[styles.uploadButton, styles.boxShadow]} onPress={handleCarDocumentUpload}>
-                            <Text style={styles.uploadButtonText}>Upload Car Document</Text>
-                        </TouchableOpacity>
-                        {carDocument && (
-                            <Text>{carDocument[0].name}</Text>
-                        )}
-                    </View>
-
-
+                    <UploadDocuments handleDrivingLicenseUpload={handleDrivingLicenseUpload}
+                     handleCarDocumentUpload={handleCarDocumentUpload}
+                     drivingLicense={drivingLicense}
+                     carDocument={carDocument}
+                     />
                     <NextBtn handleButton={handleNextBtn} value={"Next"} />
                     <ProgressPoints nbrPage={2} />
                 </View>
@@ -80,20 +70,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         backgroundColor: '#FFF'
-    },
-    uploadButton: {
-        width: '80%',
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#007bff',
-        borderRadius: 10,
-        marginBottom: 20,
-    },
-    uploadButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
     },
     boxShadow: {
         shadowColor: '#222222',

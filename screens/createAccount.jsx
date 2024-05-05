@@ -8,21 +8,26 @@ const CreateAccount = ({ route, navigation }) => {
     const [firstName, setFirstName] = useState(null);
     const [lastName, setLastName] = useState(null);
     const [selectedDate, setSelectedDate] = useState(new Date());
-
+    const [valid1, setvalid1] = useState(true)
+    const [valid2, setvalid2] = useState(true)
     const idcmp = route.params;
     const offerid = route.params;
 
     const handleFirstNameInput = (text) => {
         if (text.length >= 3 && /^[a-zA-Z]+$/.test(text)) {
+            setvalid1(true);
             setFirstName(text);
         } else {
+            setvalid1(false);
             setFirstName(null);
         }
     }
     const handleLastNameInput = (text) => {
         if (text.length >= 3 && /^[a-zA-Z]+$/.test(text)) {
+            setvalid2(true);
             setLastName(text);
         } else {
+            setvalid2(false)
             setLastName(null);
         }
     }
@@ -34,7 +39,7 @@ const CreateAccount = ({ route, navigation }) => {
         } else {
             const currentDate = new Date();
             const birthDate = new Date(selectedDate);
-            const age = currentDate.getFullYear() - birthDate.getFullYear();
+            let age = currentDate.getFullYear() - birthDate.getFullYear();
             const monthDiff = currentDate.getMonth() - birthDate.getMonth();
             if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
                 age--;
@@ -43,7 +48,7 @@ const CreateAccount = ({ route, navigation }) => {
             if (age < 18) {
                 Alert.alert('Age Restriction', 'You must be at least 18 years old to proceed.');
             } else {
-                navigation.navigate('Page2');
+                navigation.navigate('CreateAccount2', { firstName, lastName, selectedDate, idcmp, offerid });
             }
 
         }
@@ -66,9 +71,9 @@ const CreateAccount = ({ route, navigation }) => {
                         <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
 
                             <View style={{ width: '80%' }}>
-                                <CustomInputText field={firstName} label={'First Name'} handlData={handleFirstNameInput} />
+                                <CustomInputText field={valid1} label={'First Name'} handlData={handleFirstNameInput} />
 
-                                <CustomInputText field={lastName} label={'Last Name'} handlData={handleLastNameInput} />
+                                <CustomInputText field={valid2} label={'Last Name'} handlData={handleLastNameInput} />
 
                                 <View style={[styles.dateSelector, styles.boxShadow, { marginBottom: 20 }]}>
                                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Date of Birth</Text>
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-around',
-        backgroundColor:'#FFF'
+        backgroundColor: '#FFF'
     },
     dateSelector: {
         flexDirection: 'row',
