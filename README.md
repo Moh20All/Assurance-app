@@ -36,4 +36,9 @@ npm install react-native-select-dropdown
 ```bash
 npm install react-native-date-picker
 ```
+# document-picker
+
+```bash
+npm install react-native-document-picker
+```
 
