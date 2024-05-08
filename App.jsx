@@ -14,7 +14,6 @@ import CreateAccount2 from './screens/createAccount2';
 import DisplayOffers from './screens/DisplayOffers';
 import Validate from './screens/logInsuranceNumber';
 import Page3 from './screens/CreateAccount3';
-import Profile from './screens/Profile';
 const Stack = createNativeStackNavigator();
 const App = () => {
   return (
@@ -28,7 +27,6 @@ const App = () => {
         <Stack.Screen component={Companies} name={'Companies'} options={{ headerShown: false }} />
         <Stack.Screen component={Brows} name="Offers" options={{ headerShown: false }} />
         <Stack.Screen component={Page3} name={'Page3'} options={{ headerShown: false }} />
-        <Stack.Screen component={Profile} name={'Profile'} options={{ headerShown: false }} />
 
         <Stack.Screen component={CreateAccount4} name={'CreateAccount4'} options={{ headerShown: false }} />
         <Stack.Screen

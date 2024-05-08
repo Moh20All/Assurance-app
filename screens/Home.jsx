@@ -1,72 +1,77 @@
-import React, { useState, useEffect } from "react";
-import { View, SafeAreaView, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, SafeAreaView, Text, Image, Alert, FlatList, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import colors from "../assets/Colors";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import UploadDocuments from "../components/UploadDocuments";
+import NextBtn from "../components/NextBtn";
 
-const Home = ({ route }) => {
+const Home = ({ route, navigation }) => {
     const { isValid, id } = route.params;
-    const [firstName, setFirstName] = useState('Riad');
-    const [lastName, setLastName] = useState('Kadri');
-    const [data, setData] = useState([]);
-
-    const cardata = [
-        { id: 'Gdd-98DFD', expired: true, dateExp: new Date(2023, 3, 23) },
-        { id: 'Gdd-BD-776X8', expired: false, dateExp: new Date(2024, 4, 1) },
-        { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) },
-        { id: 'Gdd-CD-776X8', expired: false, dateExp: new Date(2024, 4, 1) },
-        { id: 'Gdd-978DFD', expired: false, dateExp: new Date(2025, 3, 23) }
-    ];
-
-    const truckdata = [
-        { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) }
-    ];
-
-    const motordata = [
-        { id: 'Gdd-98DFD', expired: true, dateExp: new Date(2023, 3, 23) },
-        { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) }
-    ];
-    const fetchAssureDetails = (ass_id) => {
-        return new Promise((resolve, reject) => {
-          fetch(`http://10.0.2.2:3000/assure-details?ass_id=${ass_id}`)
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [insurance, setInsurance] = useState(null);
+    const [documentPicker, setDocumentPicker] = useState(false);
+    const [drivingLicense, setDrivingLicense] = useState(null);
+    const [carDocument, setCarDocument] = useState(null);
+    const [cardata, setCardata] = useState([]);
+    const [truckdata, setTruckdata] = useState([]);
+    const [motordata, setMotordata] = useState([]);
+    const [userData,setUserData]= useState({});
+// Define the fetchAssureDetails function
+const fetchAssureDetails = (ass_id) => {
+    return new Promise((resolve, reject) => {
+        fetch(`http://10.0.2.2:3000/assure-details?ass_id=5478291032`)
             .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.json();
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
             })
             .then(data => {
-              resolve(data);
-            })
-            .catch(error => {
-              reject(error);
-            });
-        });
-      };
-      
-      // Example usage
-      const ass_id = '5478291032'; // Replace with the actual ass_id
-      fetchAssureDetails(ass_id)
-        .then(data => {
-          console.log('Assurance details:', data);
-          // Handle the returned data
-        })
-        .catch(error => {
-          // Handle errors
-        });
-      
-    useEffect(() => {
-        fetchAssureDetails(id)
-            .then(data => {
-                console.log('Assurance details:', data);
-                // Update state with fetched data
-                setData(data.data);
+                //console.log('Assurance details:', data);
+                const userDetails = data.data || [];
+                
+                // Check if data is available
+                if (userDetails.length > 0) {
+                    const commonData = {
+                        nom_ass: userDetails[0].nom_ass,
+                        prenom_ass: userDetails[0].prenom_ass,
+                        permis: userDetails[0].permis
+                    };
+                    console.log("Daaamn:"+commonData)
+                    setUserData(commonData);
+                }
+
+                // Categorize car data
+                const carData = userDetails.filter(detail => detail.type === 'car');
+                const truckData = userDetails.filter(detail => detail.type === 'fourgon');
+                const motorData = userDetails.filter(detail => detail.type === 'moto');
+                console.log('car:', carData)
+                console.log('truck:', truckData)
+                console.log('moto:', motorData)
+                // Update state with categorized data
+                setCardata(carData);
+                setTruckdata(truckData);
+                setMotordata(motorData);
+
+                resolve(data);
             })
             .catch(error => {
                 console.error('Error fetching assurance details:', error);
-                // Handle errors
+                reject(error);
             });
-    }, [id]);
+    });
+};
+
+// Call the fetchAssureDetails function with the specified ass_id
+useEffect(() => {
+    console.log(id)
+    fetchAssureDetails(id);
+}, [id]);
+
+
+    const [data, setData] = useState(cardata);
 
     const handleData = (x) => {
         if (x == 1) {
@@ -78,8 +83,7 @@ const Home = ({ route }) => {
         else if (x == 3) {
             setData(motordata);
         }
-    };
-
+    }
     const calculateDateColor = (expirationDate) => {
         const today = new Date();
         const differenceInDays = Math.floor((expirationDate - today) / (1000 * 60 * 60 * 24));
@@ -93,41 +97,95 @@ const Home = ({ route }) => {
         }
     };
 
-    const calculateTimeLeft = (expDate) => {
+    const calculateTimeLeft = (expDate1) => {
         const today = new Date();
+        const expDate = new Date(expDate1);
+
         const differenceInMilliseconds = expDate - today;
         const daysLeft = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
 
         return {
             days: daysLeft,
         };
+    }
+    const handleDrivingLicenseUpload = async () => {
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
+            });
+            setDrivingLicense(res);
+        } catch (err) {
+            console.error('Error picking driving license:', err);
+        }
     };
 
+    const handleCarDocumentUpload = async () => {
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
+            });
+            setCarDocument(res);
+        } catch (err) {
+            console.error('Error picking car document:', err);
+        }
+    };
     const renderItem = ({ item }) => {
-        return (
-            <View style={[styles.itemContainer, styles.boxShadow]}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.itemId}>{item.id}</Text>
-                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: calculateDateColor(item.dateExp) }}>
-                        {calculateTimeLeft(item.dateExp).days <= 0 ? `Insurance Expired\n${item.dateExp.toLocaleDateString()}` : `Time Left: ${calculateTimeLeft(item.dateExp).days} days`}
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.settingsButton}>
-                        <Image source={require('../assets/icons/settings.png')} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.renewButton}>
-                        <Text style={styles.renewButtonText}>Renew</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    };
+        // Check the type of item and render accordingly
+            return (
+                <TouchableOpacity
+                    style={[
+                        styles.itemContainer,
+                        styles.boxShadow,
+                        { backgroundColor: item === insurance ? 'lightgrey' : '#FFF' }
+                    ]}
+                    disabled={calculateTimeLeft(item.date_fin).days > 0 ? false : true}
+                    onPress={() => {
+                        if (insurance === item) setInsurance(null)
+                        else setInsurance(item)
+                    }}
+                >
+                    <View style={styles.textContainer}>
+                        <Text style={styles.itemId}>{item.marque+" "+item.model}</Text>
+                        <Text style={{ fontSize: 15, fontWeight: 'bold', color: calculateDateColor(item.date_fin) }}>
+                            {calculateTimeLeft(item.date_fin).days <= 0 ? `Insurance Expired\n${new Date(item.date_fin).toLocaleDateString()}` : `Time Left: ${calculateTimeLeft(item.date_fin).days} days`}
+                        </Text>
+                    </View>
+    
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            onPress={() => { setDocumentPicker(true) }}
+                            style={[
+                                styles.renewButton,
+                                { backgroundColor: calculateTimeLeft(item.date_fin).days <= 7 ? colors.lightBlue : '#D0E0E3' }
+                            ]}
+                            disabled={calculateTimeLeft(item.date_fin).days <= 7 ? false : true}
+                        >
+                            <Text style={styles.renewButtonText}>Renew</Text>
+                        </TouchableOpacity>
+                    </View>
+                </TouchableOpacity>
+            );
 
+    };
+    
+    const senistre = () => {
+        if (insurance === null) {
+            Alert.alert('Warning', `Select a valid insurance`)
+        }
+    }
+    const handlRenewBtn = () => {
+        if (carDocument != null && drivingLicense != null) {
+            Alert.alert('Notice', 'You will resive an email when your documents are verified');
+            setDocumentPicker(false);
+        }
+        else{
+            Alert.alert('Error','Upload a valid documents please');
+        }
+    }
     return (
         <SafeAreaView style={styles.safeAreaView}>
             <View style={styles.container}>
-                <Header pageName={"Dashboard"} route={route} />
+                <Header pageName={"Dashboard"} profile={()=>{navigation.navigate('Profile')}}/>
 
                 <View style={styles.userData}>
                     <Image style={{ width: 50, height: 70 }} resizeMethod='resize' resizeMode='contain' source={require('../assets/images/large-removebg.png')} />
@@ -136,49 +194,71 @@ const Home = ({ route }) => {
                     </View>
                 </View>
 
-                {isValid ? (
-                    <View>
-                        <View style={styles.iconContainer}>
-                            <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(1)}>
-                                <View style={styles.iconBadge}>
-                                    <Text style={styles.iconBadgeText}>{cardata.length}</Text>
-                                </View>
-                                <Image style={styles.iconImage} source={require('../assets/icons/car.png')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(2)}>
-                                <View style={styles.iconBadge}>
-                                    <Text style={styles.iconBadgeText}>{truckdata.length}</Text>
-                                </View>
-                                <Image style={styles.iconImage} source={require('../assets/icons/truck.png')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.icon]} onPress={() => handleData(3)}>
-                                <View style={styles.iconBadge}>
-                                    <Text style={styles.iconBadgeText}>{motordata.length}</Text>
-                                </View>
-                                <Image style={styles.iconImage} source={require('../assets/icons/motorbike.png')} />
-                            </TouchableOpacity>
+                <View style={styles.iconContainer}>
+                    <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(1)}>
+                        <View style={styles.iconBadge}>
+                            <Text style={styles.iconBadgeText}>{cardata.length}</Text>
                         </View>
+                        <Image style={styles.iconImage} source={require('../assets/icons/car.png')} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.icon, { borderRightWidth: 1, }]} onPress={() => handleData(2)}>
+                        <View style={styles.iconBadge}>
+                            <Text style={styles.iconBadgeText}>{truckdata.length}</Text>
+                        </View>
+                        <Image style={styles.iconImage} source={require('../assets/icons/truck.png')} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.icon]} onPress={() => handleData(3)}>
+                        <View style={styles.iconBadge}>
+                            <Text style={styles.iconBadgeText}>{motordata.length}</Text>
+                        </View>
+                        <Image style={styles.iconImage} source={require('../assets/icons/motorbike.png')} />
+                    </TouchableOpacity>
+                </View>
 
-                        <View style={styles.flatListContainer}>
-                            <FlatList
-                                data={data}
-                                keyExtractor={item => item.id}
-                                renderItem={renderItem}
-                            />
+                <View style={styles.flatListContainer}>
+                    {data == null ? <Image style={{ width: '100%', height: '100%' }} source={require('../assets/images/noData.jpg')} /> : <FlatList
+                        data={data}
+                        keyExtractor={item => item.id}
+                        renderItem={renderItem}
+                    />}
+                </View>
+                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow]} onPress={() => navigation.navigate('Offers', 1, true)}>
+                    <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
+                    <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
+                    <Image source={require("../assets/icons/greaterThanWhite.png")} />
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow, { backgroundColor: colors.peach, borderWidth: 0.3 }]} onPress={senistre}>
+                    <Image source={require('../assets/icons/car-crash.png')} style={styles.addicon} />
+                    <Text style={[styles.bottomButtonText, { color: '#000' }]}>Declarer un sinistre</Text>
+                    <Image source={require("../assets/icons/greaterThanBlack.png")} style={styles.addicon} />
+                </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.bottomButton} onPress={() => navigation.navigate('Companies', false)}>
-                                <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
-                                <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
-                                <Image source={require("../assets/icons/greaterThanWhite.png")} />
+
+                <Modal visible={documentPicker} animationType='fade' transparent={true}>
+                    <View  style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <View style={[styles.modalContent, styles.boxShadow]}>
+                            <Image style={{ width: 250, height: 250 }} source={require('../assets/images/splashScreen.png')} />
+                            <View style={{ width: '100%', marginVertical: 20 }}>
+                                <UploadDocuments handleDrivingLicenseUpload={handleDrivingLicenseUpload}
+                                    handleCarDocumentUpload={handleCarDocumentUpload}
+                                    drivingLicense={drivingLicense}
+                                    carDocument={carDocument}
+                                />
+                            </View>
+                            <NextBtn value={'Demand Renew'} handleButton={handlRenewBtn} />
+                            <TouchableOpacity style={[{backgroundColor:colors.peach,width:'80%',alignItems:'center',
+                            justifyContent:'space-between',flexDirection:'row',height:60,marginVertical:10,paddingHorizontal:15,
+                            borderRadius:10},styles.boxShadow]} onPress={()=>setDocumentPicker(false)}>
+                                <Text style={{color:'black',fontSize:18,fontWeight:'bold'}}>Close</Text>
+                                <Image source={require('../assets/icons/greaterThanBlack.png') }style={{width:30,height:30}}/>
                             </TouchableOpacity>
                         </View>
                     </View>
-                ) : null}
-
-                <Footer navigation={route} />
+                </Modal>
             </View>
         </SafeAreaView>
     );
+
 };
 
 const styles = StyleSheet.create({
@@ -189,6 +269,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: '#FFF'
     },
     boxShadow: {
         shadowColor: '#222222',
@@ -250,16 +331,15 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
-        marginHorizontal: 10,
         justifyContent: 'center',
-        marginBottom: 140
     },
     itemContainer: {
-        width: '100%',
+        width: '95%',
         backgroundColor: 'white',
         height: 80,
         flexDirection: 'row',
         marginVertical: 20,
+        alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'space-between',
         borderRadius: 5,
@@ -274,9 +354,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#222222'
     },
+
     buttonContainer: {
         flexDirection: 'row',
-        width: '40%',
+        width: '20%',
         justifyContent: 'space-evenly'
     },
     settingsButton: {
@@ -298,26 +379,33 @@ const styles = StyleSheet.create({
         color: '#000'
     },
     bottomButton: {
-        width: '100%',
+        width: '90%',
         height: 50,
         backgroundColor: colors.blue,
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: 20,
-        marginBottom: -70,
         borderRadius: 10,
-        gap: 5,
-        marginTop: 10
+        marginVertical: 15,
     },
+
     addicon: {
-        width: 20,
-        height: 20,
+        width: 28,
+        height: 28,
+
     },
     bottomButtonText: {
         color: '#FFF',
         fontSize: 20
     },
+    modalContent: {
+        width: '80%',
+        paddingVertical: 20,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
+    },
 });
-
 export default Home;
