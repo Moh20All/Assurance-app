@@ -41,4 +41,11 @@ npm install react-native-date-picker
 ```bash
 npm install react-native-document-picker
 ```
+# qrcode-svg
+
+```bash
+npm install react-native-svg react-native-qrcode-svg
+```
+
+
 
