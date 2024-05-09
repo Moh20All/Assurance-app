@@ -7,7 +7,7 @@ import ForgetPasswod from './screens/forgetPassword';
 import CreateAccount from './screens/createAccount';
 import Companies from './screens/Companies';
 import CreateAccount4 from './screens/createAccount4';
-import Home from './screens/home';
+import Home from './screens/Home';
 import FirstUse from './screens/FirstUse'
 import Brows from './screens/BrowsOffers';
 import CreateAccount2 from './screens/createAccount2';
