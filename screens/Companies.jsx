@@ -5,16 +5,16 @@ import insuranceData from '../insuranceData.json';
 
 const Companies  = ({ navigation ,route}) => {
     const haveAccount=route.params;
-    const HandleClick = (id) => {
+    const HandleClick = (idcmp) => {
         if(haveAccount)
         {
-            navigation.navigate("Validate",{Company:id});
+            navigation.navigate("Validate",{Company:idcmp});
         }
         else{
-             navigation.navigate("Offers",{idcmp:id});
+            Alert.alert('here',`${idcmp }`);
+            navigation.navigate("Offers",{idcmp:idcmp ,signed:false});
         }
     };
-    
 
     const renderItem = ({item}) => {
         return (
@@ -23,6 +23,7 @@ const Companies  = ({ navigation ,route}) => {
             </View>
         );
     };
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{flex:1,width:'100%',alignItems:'center'}}>
@@ -33,7 +34,7 @@ const Companies  = ({ navigation ,route}) => {
                     <FlatList
                     data={insuranceData.insuranceCompanies}
                     renderItem={renderItem}
-                    keyExtractor={(item) => {item.id}}
+                    keyExtractor={(item) => {item.id.toString()}}
                 />
                 </View>
                

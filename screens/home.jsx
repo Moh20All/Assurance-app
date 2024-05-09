@@ -7,70 +7,47 @@ import UploadDocuments from "../components/UploadDocuments";
 import NextBtn from "../components/NextBtn";
 
 const Home = ({ route, navigation }) => {
-    const { isValid, id } = route.params;
+    const { isValid } = route.params;
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
+    const { userId } = route.params;
     const [insurance, setInsurance] = useState(null);
     const [documentPicker, setDocumentPicker] = useState(false);
     const [drivingLicense, setDrivingLicense] = useState(null);
     const [carDocument, setCarDocument] = useState(null);
-    const [cardata, setCardata] = useState([]);
-    const [truckdata, setTruckdata] = useState([]);
-    const [motordata, setMotordata] = useState([]);
-    const [userData,setUserData]= useState({});
-// Define the fetchAssureDetails function
-const fetchAssureDetails = (ass_id) => {
-    return new Promise((resolve, reject) => {
-        fetch(`http://10.0.2.2:3000/assure-details?ass_id=5478291032`)
-            .then(response => {
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await fetch(`http://10.0.2.2:3000/user-details?userId=${userId}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json();
-            })
-            .then(data => {
-                //console.log('Assurance details:', data);
-                const userDetails = data.data || [];
-                
-                // Check if data is available
-                if (userDetails.length > 0) {
-                    const commonData = {
-                        nom_ass: userDetails[0].nom_ass,
-                        prenom_ass: userDetails[0].prenom_ass,
-                        permis: userDetails[0].permis
-                    };
-                    console.log("Daaamn:"+commonData)
-                    setUserData(commonData);
-                }
+                const data = await response.json();
+                setFirstName(data.FirstName);
+                setLastName(data.LastName);
+            } catch (error) {
+                console.error('Error fetching user information:', error);
+            }
+        };
 
-                // Categorize car data
-                const carData = userDetails.filter(detail => detail.type === 'car');
-                const truckData = userDetails.filter(detail => detail.type === 'fourgon');
-                const motorData = userDetails.filter(detail => detail.type === 'moto');
-                console.log('car:', carData)
-                console.log('truck:', truckData)
-                console.log('moto:', motorData)
-                // Update state with categorized data
-                setCardata(carData);
-                setTruckdata(truckData);
-                setMotordata(motorData);
+        fetchUserDetails();
+    }, [userId]);
 
-                resolve(data);
-            })
-            .catch(error => {
-                console.error('Error fetching assurance details:', error);
-                reject(error);
-            });
-    });
-};
-
-// Call the fetchAssureDetails function with the specified ass_id
-useEffect(() => {
-    console.log(id)
-    fetchAssureDetails(id);
-}, [id]);
-
-
+    const cardata = [
+        { id: 'Gdd-98DFD', expired: true, dateExp: new Date(2023, 3, 23) },
+        { id: 'Gdd-BD-776X8', expired: false, dateExp: new Date(2024, 4, 1) },
+        { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) },
+        { id: 'Gdd-CD-776X8', expired: false, dateExp: new Date(2024, 4, 9) },
+        { id: 'Gdd-978DFD', expired: false, dateExp: new Date(2025, 3, 23) }
+    ];
+    const truckdata = [
+        { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) }
+    ];
+    const motordata = [
+        { id: 'Gdd-98DFD', expired: true, dateExp: new Date(2023, 3, 23) },
+        { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) }
+    ];
     const [data, setData] = useState(cardata);
 
     const handleData = (x) => {
@@ -97,10 +74,8 @@ useEffect(() => {
         }
     };
 
-    const calculateTimeLeft = (expDate1) => {
+    const calculateTimeLeft = (expDate) => {
         const today = new Date();
-        const expDate = new Date(expDate1);
-
         const differenceInMilliseconds = expDate - today;
         const daysLeft = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
 
@@ -130,44 +105,29 @@ useEffect(() => {
         }
     };
     const renderItem = ({ item }) => {
-        // Check the type of item and render accordingly
-            return (
-                <TouchableOpacity
-                    style={[
-                        styles.itemContainer,
-                        styles.boxShadow,
-                        { backgroundColor: item === insurance ? 'lightgrey' : '#FFF' }
-                    ]}
-                    disabled={calculateTimeLeft(item.date_fin).days > 0 ? false : true}
-                    onPress={() => {
-                        if (insurance === item) setInsurance(null)
-                        else setInsurance(item)
-                    }}
-                >
-                    <View style={styles.textContainer}>
-                        <Text style={styles.itemId}>{item.marque+" "+item.model}</Text>
-                        <Text style={{ fontSize: 15, fontWeight: 'bold', color: calculateDateColor(item.date_fin) }}>
-                            {calculateTimeLeft(item.date_fin).days <= 0 ? `Insurance Expired\n${new Date(item.date_fin).toLocaleDateString()}` : `Time Left: ${calculateTimeLeft(item.date_fin).days} days`}
-                        </Text>
-                    </View>
-    
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            onPress={() => { setDocumentPicker(true) }}
-                            style={[
-                                styles.renewButton,
-                                { backgroundColor: calculateTimeLeft(item.date_fin).days <= 7 ? colors.lightBlue : '#D0E0E3' }
-                            ]}
-                            disabled={calculateTimeLeft(item.date_fin).days <= 7 ? false : true}
-                        >
-                            <Text style={styles.renewButtonText}>Renew</Text>
-                        </TouchableOpacity>
-                    </View>
-                </TouchableOpacity>
-            );
+        return (
+            <TouchableOpacity style={[styles.itemContainer, styles.boxShadow, { backgroundColor: item === insurance ? 'lightgrey' : '#FFF' }]}
+                disabled={calculateTimeLeft(item.dateExp).days > 0 ? false : true}
+                onPress={() => {
+                    if (insurance === item) setInsurance(null)
+                    else setInsurance(item)
+                }}>
+                <View style={styles.textContainer}>
+                    <Text style={styles.itemId}>{item.id}</Text>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: calculateDateColor(item.dateExp) }}>
+                        {calculateTimeLeft(item.dateExp).days <= 0 ? `Insurance Expired\n${item.dateExp.toLocaleDateString()}` : `Time Left: ${calculateTimeLeft(item.dateExp).days} days`}
+                    </Text>
+                </View>
 
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={() => { setDocumentPicker(true) }} style={[styles.renewButton, { backgroundColor: calculateTimeLeft(item.dateExp).days <= 7 ? colors.lightBlue : '#D0E0E3' }]} disabled={calculateTimeLeft(item.dateExp).days <= 7 ? false : true}>
+                        <Text style={styles.renewButtonText}>Renew</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </TouchableOpacity>
+        )
     };
-    
     const senistre = () => {
         if (insurance === null) {
             Alert.alert('Warning', `Select a valid insurance`)

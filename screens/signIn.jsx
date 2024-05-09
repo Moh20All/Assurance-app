@@ -62,7 +62,7 @@ const SignIn = ({ navigation }) => {
                                     index: 0,
                                     routes: [{
                                         name: 'Home', params: {
-                                            id: data.user.user_id,
+                                            userId: data.user.user_id,
                                             isValid: true
                                         }
                                     }],

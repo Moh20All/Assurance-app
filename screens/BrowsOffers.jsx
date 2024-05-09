@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { SafeAreaView, View, StyleSheet, FlatList, Text, Image, TouchableOpacity, Modal, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, View, StyleSheet, FlatList, Text,Alert, Image, TouchableOpacity, Modal, ScrollView } from "react-native";
 import insuranceData from '../insuranceData.json'; // Import JSON data
 import colors from "../assets/Colors";
 import { PanResponder } from "react-native";
@@ -7,9 +7,8 @@ import { isEnabled } from "react-native/Libraries/Performance/Systrace";
 import UploadDocuments from "../components/UploadDocuments";
 import NextBtn from "../components/NextBtn";
 
-const Brows = ({ route, navigation }) => {
-    const idcmp = route.params;
-    const signed = route.params;
+const Brows = ({navigation, route}) => {
+    const { idcmp, signed } = route.params;
     const [visibleModal, setVisible] = useState(false);
     const [offer, setOffer] = useState([]);
     const [documentPicker, setDocumentPicker] = useState(false);
@@ -17,6 +16,9 @@ const Brows = ({ route, navigation }) => {
     const [carDocument, setCarDocument] = useState(null);
     const filteredInsuranceCompanies = insuranceData.insuranceCompanies.filter(company => company.id === idcmp);
 
+    useEffect(()=>{
+        console.log(route);
+    },[idcmp])
     const imgUrl = () => {
         switch (idcmp) {
             case 1: return require('../assets/images/saa.jpg')
@@ -67,6 +69,7 @@ const Brows = ({ route, navigation }) => {
         return (
             <Modal visible={visible} animationType='slide' transparent={true}>
                 <View style={[styles.modalContainer, styles.boxShadow]} {...panResponder.panHandlers} >
+                    <Text>Riad</Text>
                     <Text style={{ fontWeight: 'bold', fontSize: 20, color: colors.textColor }}>{offer.type}</Text>
                     <ScrollView showsHorizontalScrollIndicator={false}>
                         {(offer.guarantees || []).map((guarantee, index) => (
