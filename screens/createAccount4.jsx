@@ -33,8 +33,35 @@ const CreateAccount4 = ({ navigation, route }) => {
         const confirmationCode = "1234";
         const enteredCode = code1 + code2 + code3 + code4;
 
-        if (enteredCode === confirmationCode) {
-            navigation.navigate("SignIn");
+        if (true) {
+            // Prepare data for the POST request
+            company = idcmp;
+            const requestData = {
+                firstName,
+                lastName,
+                email,
+                pass,
+                company
+            };
+            console.log(requestData)
+            // Send POST request to server
+            fetch('http://10.0.2.2:3000/insert-request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                navigation.navigate("SignIn");
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Show error message to the user
+                Alert.alert("Error", "Failed to create account. Please try again later.");
+            });
         } else {
             Alert.alert("Invalid Confirmation Code", "Please enter the correct confirmation code.");
         }
@@ -96,7 +123,7 @@ const CreateAccount4 = ({ navigation, route }) => {
                             <Text style={{ color: "blue" }}>Resend Code</Text>
                         </TouchableOpacity>
                     )}
-                    <NextBtn handleButton={() => { setShowModel(true) }} value={"Next"} />
+                    <NextBtn handleButton={handleNextBtn} value={"Next"} />
                     <ProgressPoints nbrPage={4} />
                     <Modal visible={showModel} animationType='fade' transparent={true}>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
