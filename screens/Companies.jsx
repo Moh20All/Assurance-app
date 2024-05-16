@@ -11,7 +11,7 @@ const Companies  = ({ navigation ,route}) => {
             navigation.navigate("Validate",{Company:idcmp});
         }
         else{
-            //Alert.alert('here',`${idcmp }`);
+            Alert.alert('here',`${idcmp }`);
             navigation.navigate("Offers",{idcmp:idcmp ,signed:false});
         }
     };
