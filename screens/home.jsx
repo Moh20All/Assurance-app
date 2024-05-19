@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import UploadDocuments from "../components/UploadDocuments";
 import NextBtn from "../components/NextBtn";
-
+import Notification from "../components/notificationModel";
 const Home = ({ route, navigation }) => {
     const { isValid } = route.params;
     const [firstName, setFirstName] = useState('')
@@ -15,6 +15,7 @@ const Home = ({ route, navigation }) => {
     const [documentPicker, setDocumentPicker] = useState(false);
     const [drivingLicense, setDrivingLicense] = useState(null);
     const [carDocument, setCarDocument] = useState(null);
+    const [showNotification, setShowNotification] = useState(false);
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -138,14 +139,14 @@ const Home = ({ route, navigation }) => {
             Alert.alert('Notice', 'You will resive an email when your documents are verified');
             setDocumentPicker(false);
         }
-        else{
-            Alert.alert('Error','Upload a valid documents please');
+        else {
+            Alert.alert('Error', 'Upload a valid documents please');
         }
     }
     return (
         <SafeAreaView style={styles.safeAreaView}>
             <View style={styles.container}>
-                <Header pageName={"Dashboard"} profile={()=>{navigation.navigate('Profile')}}/>
+                <Header pageName={"Dashboard"} notification={() => setShowNotification(!showNotification)} profile={() => { navigation.navigate('Profile') }} />
 
                 <View style={styles.userData}>
                     <Image style={{ width: 50, height: 70 }} resizeMethod='resize' resizeMode='contain' source={require('../assets/images/large-removebg.png')} />
@@ -182,7 +183,7 @@ const Home = ({ route, navigation }) => {
                         renderItem={renderItem}
                     />}
                 </View>
-                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow]} onPress={() => navigation.navigate('Offers',{idcmp:1 ,signed:true})}>
+                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow]} onPress={() => navigation.navigate('Offers', { idcmp: 1, signed: true })}>
                     <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
                     <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
                     <Image source={require("../assets/icons/greaterThanWhite.png")} />
@@ -195,7 +196,7 @@ const Home = ({ route, navigation }) => {
 
 
                 <Modal visible={documentPicker} animationType='fade' transparent={true}>
-                    <View  style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View style={[styles.modalContent, styles.boxShadow]}>
                             <Image style={{ width: 250, height: 250 }} source={require('../assets/images/splashScreen.png')} />
                             <View style={{ width: '100%', marginVertical: 20 }}>
@@ -206,14 +207,24 @@ const Home = ({ route, navigation }) => {
                                 />
                             </View>
                             <NextBtn value={'Demand Renew'} handleButton={handlRenewBtn} />
-                            <TouchableOpacity style={[{backgroundColor:colors.peach,width:'80%',alignItems:'center',
-                            justifyContent:'space-between',flexDirection:'row',height:60,marginVertical:10,paddingHorizontal:15,
-                            borderRadius:10},styles.boxShadow]} onPress={()=>setDocumentPicker(false)}>
-                                <Text style={{color:'black',fontSize:18,fontWeight:'bold'}}>Close</Text>
-                                <Image source={require('../assets/icons/greaterThanBlack.png') }style={{width:30,height:30}}/>
+                            <TouchableOpacity style={[{
+                                backgroundColor: colors.peach, width: '80%', alignItems: 'center',
+                                justifyContent: 'space-between', flexDirection: 'row', height: 60, marginVertical: 10, paddingHorizontal: 15,
+                                borderRadius: 10
+                            }, styles.boxShadow]} onPress={() => setDocumentPicker(false)}>
+                                <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>Close</Text>
+                                <Image source={require('../assets/icons/greaterThanBlack.png')} style={{ width: 30, height: 30 }} />
                             </TouchableOpacity>
                         </View>
                     </View>
+                </Modal>
+
+                <Modal visible={showNotification} animationType='fade' transparent={true}>
+                    <View style={styles.notificationModel}>
+                        <Header pageName={"Dashboard"} notification={() => setShowNotification(!showNotification)} profile={() => { navigation.navigate('Profile') }} />
+                        <Notification />
+                    </View>
+
                 </Modal>
             </View>
         </SafeAreaView>
@@ -367,5 +378,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 20,
     },
+    notificationModel: {
+        width: '100%',
+        height:'100%',
+        backgroundColor: 'white',
+
+    }
 });
 export default Home;
