@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, I
 import PasswordInput from "../components/PasswordInput";
 import CustomInputText from "../components/CustomInputText";
 import colors from "../assets/Colors";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = ({ navigation }) => {
     const [username, setUsername] = useState(null);
@@ -25,7 +25,7 @@ const SignIn = ({ navigation }) => {
     const handlePasswordChange = (text) => {
         setPassword(text);
     };
-
+ 
     const handleSignIn = () => {
         // Construct the request body
         setShow(true); // Toggling show state before the fetch request
@@ -57,7 +57,7 @@ const SignIn = ({ navigation }) => {
                         .then(response => response.json())
                         .then(assureCompteData => {
                             if (assureCompteData.success) {
-                                setShow(false)
+                                setShow(false);
                                 navigation.reset({
                                     index: 0,
                                     routes: [{

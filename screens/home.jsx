@@ -31,8 +31,21 @@ const Home = ({ route, navigation }) => {
                 console.error('Error fetching user information:', error);
             }
         };
+        const storUserId = async () => {
+            try {
+                const val = stringify(userId);
+                const val2 = stringify(false);
+                console.log("first use "+ val2 +" user Id "+val)
 
+                await AsyncStorage.setItem('userId', val);
+                await AsyncStorage.setItem('firstUse', val2);
+            } catch (e) {
+                console.log('error Async storage')
+            }
+        }
         fetchUserDetails();
+        storUserId();
+
     }, [userId]);
 
     const cardata = [
@@ -188,7 +201,7 @@ const Home = ({ route, navigation }) => {
                     <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
                     <Image source={require("../assets/icons/greaterThanWhite.png")} />
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow, { backgroundColor: colors.peach, borderWidth: 0.3 }]} onPress={senistre}>
+                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow, { backgroundColor: colors.peach, borderWidth: 0.3 }]} onPress={()=>navigation.navigate("Sinistre",{contractId:1,userId:userId})}>
                     <Image source={require('../assets/icons/car-crash.png')} style={styles.addicon} />
                     <Text style={[styles.bottomButtonText, { color: '#000' }]}>Declarer un sinistre</Text>
                     <Image source={require("../assets/icons/greaterThanBlack.png")} style={styles.addicon} />
@@ -380,7 +393,7 @@ const styles = StyleSheet.create({
     },
     notificationModel: {
         width: '100%',
-        height:'100%',
+        height: '100%',
         backgroundColor: 'white',
 
     }
