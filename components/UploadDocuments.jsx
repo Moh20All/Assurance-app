@@ -1,6 +1,6 @@
 import React from "react";
-import { View, TouchableOpacity, Text,StyleSheet } from "react-native";
-const UploadDocuments = ({ handleDrivingLicenseUpload, handleCarDocumentUpload, drivingLicense, carDocument }) => {
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+const UploadDocuments = ({ handleDrivingLicenseUpload, handleCarDocumentUpload, handleContact,drivingLicense, carDocument,sinistre }) => {
     return (
         <View style={{ width: '100%' }}>
             <View style={{ width: '100%', alignItems: 'center', marginVertical: 30 }}>
@@ -19,10 +19,18 @@ const UploadDocuments = ({ handleDrivingLicenseUpload, handleCarDocumentUpload, 
                     <Text>{carDocument[0].name}</Text>
                 )}
             </View>
+            {sinistre && <View style={{ width: '100%', alignItems: 'center' }}>
+                <TouchableOpacity style={[styles.uploadButton, styles.boxShadow]} onPress={handleContact}>
+                    <Text style={styles.uploadButtonText}>Upload Contract</Text>
+                </TouchableOpacity>
+                {carDocument && (
+                    <Text>{carDocument[0].name}</Text>
+                )}
+            </View>}
         </View>
     );
 };
-const styles=StyleSheet.create(
+const styles = StyleSheet.create(
     {
         uploadButton: {
             width: '80%',
