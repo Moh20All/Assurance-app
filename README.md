@@ -47,5 +47,33 @@ npm install react-native-document-picker
 npm install react-native-svg react-native-qrcode-svg
 ```
 
+# async-storage
 
+```bash
+npm install @react-native-async-storage/async-storage
+```
 
+# qrcode-scanner
+
+```bash
+npm install react-native-qrcode-scanner
+```
+
+# radio-buttons-group
+
+```bash
+npm i react-native-radio-buttons-group --save
+```
+
+# checkbox 
+
+```bash
+npm install @react-native-community/checkbox --save
+
+```
+
+# react-native-camera
+
+```bash
+npm install react-native-camera --save
+```
