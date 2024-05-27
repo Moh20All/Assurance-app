@@ -7,7 +7,7 @@ import ForgetPasswod from './screens/forgetPassword';
 import CreateAccount from './screens/createAccount';
 import Companies from './screens/Companies';
 import CreateAccount4 from './screens/createAccount4';
-import Home from './screens/Home';
+import Home from './screens/home';
 import FirstUse from './screens/FirstUse'
 import Brows from './screens/BrowsOffers';
 import CreateAccount2 from './screens/createAccount2';
@@ -15,6 +15,8 @@ import DisplayOffers from './screens/DisplayOffers';
 import Validate from './screens/logInsuranceNumber';
 import Page3 from './screens/CreateAccount3';
 import Profile from './screens/Profile';
+import Sinistre from './screens/sinistre';
+import ScanScreen from './screens/ScanScreen';
 const Stack = createNativeStackNavigator();
 const App = () => {
   return (
@@ -39,6 +41,8 @@ const App = () => {
         <Stack.Screen component={FirstUse} name={'Welcome'} options={{ headerShown: false }} />
         <Stack.Screen component={Validate} name={'Validate'} options={{ headerShown: false }} />
         <Stack.Screen component={DisplayOffers} name={'OffersDisplay'} options={{ headerShown: false }} />
+        <Stack.Screen component={Sinistre} name={'Sinistre'} options={{ headerShown: false }}/>
+        <Stack.Screen component={ScanScreen} name={'ScanScreen'} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
