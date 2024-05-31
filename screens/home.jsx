@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { View, SafeAreaView, Text, Image, Alert, FlatList, StyleSheet, Modal, TouchableOpacity } from "react-native";
+import { View, SafeAreaView, Text, Image, Alert, FlatList, StyleSheet, Modal, TouchableOpacity, ActivityIndicator } from "react-native";
 import colors from "../assets/Colors";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import UploadDocuments from "../components/UploadDocuments";
 import NextBtn from "../components/NextBtn";
 import Notification from "../components/notificationModel";
+import axios from "axios";
+import DocumentPicker from 'react-native-document-picker';
+import Sinistre from "./sinistre";
+
+
+
 const Home = ({ route, navigation }) => {
     const { isValid } = route.params;
     const [firstName, setFirstName] = useState('')
@@ -16,53 +22,57 @@ const Home = ({ route, navigation }) => {
     const [drivingLicense, setDrivingLicense] = useState(null);
     const [carDocument, setCarDocument] = useState(null);
     const [showNotification, setShowNotification] = useState(false);
+    const [cardata, setCarData] = useState([])
+    const [truckdata, setTruckData] = useState([])
+    const [motordata, setMotorCarData] = useState([])
+    const [data, setData] = useState(cardata);
+    const [activeIndicator, setIndicator] = useState(true);
+    const [renewId,setRenewId]=useState();
+
 
     useEffect(() => {
-        const fetchUserDetails = async () => {
+        const fetchUserDetails = async (userId) => {
             try {
-                const response = await fetch(`http://10.0.2.2:3000/user-details?userId=${userId}`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setFirstName(data.FirstName);
-                setLastName(data.LastName);
+                Alert.alert('userid',`${userId}`)
+                const response = await axios.get(`http://10.0.2.2:3000/user-details/${userId}`);
+                const data = response.data;
+                console.log('User details:', data);
+                setFirstName(data.userInfo.nom_ass)
+                setLastName(data.userInfo.prenom_ass)
+                const cars = data.userContracts.filter(contract => contract.libelle_type_contrat === "1");
+                const trucks = data.userContracts.filter(contract => contract.libelle_type_contrat === "2");
+                const motors = data.userContracts.filter(contract => contract.libelle_type_contrat === "3");
+
+                // Set the filtered data to state
+                setCarData(cars);
+                setTruckData(trucks)
+                setMotorCarData(motors)
             } catch (error) {
                 console.error('Error fetching user information:', error);
+                throw error;
             }
         };
+
         const storUserId = async () => {
             try {
-                const val = stringify(userId);
-                const val2 = stringify(false);
-                console.log("first use "+ val2 +" user Id "+val)
-
+                const val = String(userId);
                 await AsyncStorage.setItem('userId', val);
-                await AsyncStorage.setItem('firstUse', val2);
             } catch (e) {
-                console.log('error Async storage')
+                console.log('Error storing userId in AsyncStorage:', e);
             }
-        }
-        fetchUserDetails();
+        };
+
+        fetchUserDetails(userId);
         storUserId();
 
     }, [userId]);
 
-    const cardata = [
-        { id: 'Gdd-98DFD', expired: true, dateExp: new Date(2023, 3, 23) },
-        { id: 'Gdd-BD-776X8', expired: false, dateExp: new Date(2024, 4, 1) },
-        { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) },
-        { id: 'Gdd-CD-776X8', expired: false, dateExp: new Date(2024, 4, 9) },
-        { id: 'Gdd-978DFD', expired: false, dateExp: new Date(2025, 3, 23) }
-    ];
-    const truckdata = [
-        { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) }
-    ];
-    const motordata = [
-        { id: 'Gdd-98DFD', expired: true, dateExp: new Date(2023, 3, 23) },
-        { id: 'Gdd-90DFD', expired: false, dateExp: new Date(2025, 3, 23) }
-    ];
-    const [data, setData] = useState(cardata);
+
+    useEffect(() => {
+        setData(cardata);
+        setIndicator(false);
+    }, [cardata])
+
 
     const handleData = (x) => {
         if (x == 1) {
@@ -75,6 +85,9 @@ const Home = ({ route, navigation }) => {
             setData(motordata);
         }
     }
+
+
+
     const calculateDateColor = (expirationDate) => {
         const today = new Date();
         const differenceInDays = Math.floor((expirationDate - today) / (1000 * 60 * 60 * 24));
@@ -88,6 +101,8 @@ const Home = ({ route, navigation }) => {
         }
     };
 
+
+
     const calculateTimeLeft = (expDate) => {
         const today = new Date();
         const differenceInMilliseconds = expDate - today;
@@ -97,6 +112,9 @@ const Home = ({ route, navigation }) => {
             days: daysLeft,
         };
     }
+
+
+
     const handleDrivingLicenseUpload = async () => {
         try {
             const res = await DocumentPicker.pick({
@@ -108,6 +126,8 @@ const Home = ({ route, navigation }) => {
         }
     };
 
+
+
     const handleCarDocumentUpload = async () => {
         try {
             const res = await DocumentPicker.pick({
@@ -118,48 +138,89 @@ const Home = ({ route, navigation }) => {
             console.error('Error picking car document:', err);
         }
     };
+
+
+
     const renderItem = ({ item }) => {
+        // Ensure date_fin is a Date object
+        const dateFin = new Date(item.date_fin);
+
+        const timeLeft = calculateTimeLeft(dateFin);
+        const isExpired = timeLeft.days <= 0;
+        const daysLeft = isExpired ? 'Insurance Expired' : `Time Left: ${timeLeft.days} days`;
+        const backgroundColor = item === insurance ? 'lightgrey' : '#FFF';
+        const dateColor = calculateDateColor(dateFin);
+        const formattedDate = dateFin.toLocaleDateString();
+        const renewButtonColor = timeLeft.days <= 7 ? colors.lightBlue : '#D0E0E3';
+        const renewButtonDisabled = timeLeft.days > 7;
+
         return (
-            <TouchableOpacity style={[styles.itemContainer, styles.boxShadow, { backgroundColor: item === insurance ? 'lightgrey' : '#FFF' }]}
-                disabled={calculateTimeLeft(item.dateExp).days > 0 ? false : true}
+            <TouchableOpacity
+                style={[styles.itemContainer, styles.boxShadow, { backgroundColor }]}
+                disabled={isExpired}
                 onPress={() => {
-                    if (insurance === item) setInsurance(null)
-                    else setInsurance(item)
-                }}>
+                    if (insurance === item) setInsurance(null);
+                    else setInsurance(item);
+                }}
+            >
                 <View style={styles.textContainer}>
-                    <Text style={styles.itemId}>{item.id}</Text>
-                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: calculateDateColor(item.dateExp) }}>
-                        {calculateTimeLeft(item.dateExp).days <= 0 ? `Insurance Expired\n${item.dateExp.toLocaleDateString()}` : `Time Left: ${calculateTimeLeft(item.dateExp).days} days`}
+                    <Text style={styles.itemId}>{item.contrat_id}</Text>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: dateColor }}>
+                        {isExpired ? `Insurance Expired\n${formattedDate}` : daysLeft}
                     </Text>
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => { setDocumentPicker(true) }} style={[styles.renewButton, { backgroundColor: calculateTimeLeft(item.dateExp).days <= 7 ? colors.lightBlue : '#D0E0E3' }]} disabled={calculateTimeLeft(item.dateExp).days <= 7 ? false : true}>
+                    <TouchableOpacity
+                        onPress={() => { setDocumentPicker(true); setRenewId(item.contrat_id)}}
+                        style={[styles.renewButton, { backgroundColor: renewButtonColor }]}
+                        disabled={renewButtonDisabled}
+                    >
                         <Text style={styles.renewButtonText}>Renew</Text>
                     </TouchableOpacity>
                 </View>
-
             </TouchableOpacity>
-        )
+        );
     };
+
+
+
     const senistre = () => {
         if (insurance === null) {
             Alert.alert('Warning', `Select a valid insurance`)
+        }else{
+            navigation.navigate("Sinistre", { contractId: insurance.contrat_id, userId: userId })
         }
     }
-    const handlRenewBtn = () => {
-        if (carDocument != null && drivingLicense != null) {
-            Alert.alert('Notice', 'You will resive an email when your documents are verified');
-            setDocumentPicker(false);
-        }
-        else {
-            Alert.alert('Error', 'Upload a valid documents please');
+
+
+
+    const handlRenewBtn = async () => {
+        if (carDocument && drivingLicense) {
+            try {
+                const response = await axios.put(`http://10.0.2.2:3000/updateInsurance/${renewId}`);
+                if (response.status === 200) {
+                    Alert.alert('Success', 'You will resive an email when your documents are verified.');
+                    setDocumentPicker(false);
+                } else {
+                    Alert.alert('Failed', 'Failed to renew insurance. Please try again later.');
+                }
+            } catch (error) {
+                console.error('Error renewing insurance:', error);
+                Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+            }
+        } else {
+            Alert.alert('Error', 'Please upload valid documents.');
         }
     }
+    
+
+
+
     return (
         <SafeAreaView style={styles.safeAreaView}>
             <View style={styles.container}>
-                <Header pageName={"Dashboard"} notification={() => setShowNotification(!showNotification)} profile={() => { navigation.navigate('Profile') }} />
+                <Header pageName={"Dashboard"} notification={() => setShowNotification(!showNotification)} profile={() => { navigation.navigate('Profile', { firstName: firstName, lastName: lastName, userId: userId }) }} />
 
                 <View style={styles.userData}>
                     <Image style={{ width: 50, height: 70 }} resizeMethod='resize' resizeMode='contain' source={require('../assets/images/large-removebg.png')} />
@@ -190,20 +251,23 @@ const Home = ({ route, navigation }) => {
                 </View>
 
                 <View style={styles.flatListContainer}>
-                    {data == null ? <Image style={{ width: '100%', height: '100%' }} source={require('../assets/images/noData.jpg')} /> : <FlatList
-                        data={data}
-                        keyExtractor={item => item.id}
-                        renderItem={renderItem}
-                    />}
+                    {activeIndicator ? <ActivityIndicator size={"large"} /> :
+                        data.length === 0 ? <Image style={{ width: '100%', height: '100%' }} source={require('../assets/images/noData.jpg')} /> :
+                            <FlatList
+                                data={data}
+                                keyExtractor={item => item.ass_id}
+                                renderItem={renderItem}
+                            />
+                    }
                 </View>
-                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow]} onPress={() => navigation.navigate('Offers', { idcmp: 1, signed: true })}>
+                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow]} onPress={() => navigation.navigate('Offers', { idcmp: 1, signed: true, userId: userId })}>
                     <Image source={require('../assets/icons/add.png')} style={styles.addicon} />
                     <Text style={styles.bottomButtonText}>Buy New Insurance</Text>
                     <Image source={require("../assets/icons/greaterThanWhite.png")} />
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow, { backgroundColor: colors.peach, borderWidth: 0.3 }]} onPress={()=>navigation.navigate("Sinistre",{contractId:1,userId:userId})}>
+                <TouchableOpacity style={[styles.bottomButton, styles.boxShadow, { backgroundColor: colors.peach, borderWidth: 0.3 }]} onPress={senistre}>
                     <Image source={require('../assets/icons/car-crash.png')} style={styles.addicon} />
-                    <Text style={[styles.bottomButtonText, { color: '#000' }]}>Declarer un sinistre</Text>
+                    <Text style={[styles.bottomButtonText, { color: '#000' }]}>Declare claims</Text>
                     <Image source={require("../assets/icons/greaterThanBlack.png")} style={styles.addicon} />
                 </TouchableOpacity>
 

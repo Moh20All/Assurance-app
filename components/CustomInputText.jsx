@@ -1,11 +1,20 @@
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, TextInput, StyleSheet, Animated } from "react-native";
 import colors from "../assets/Colors";
 
-const CustomInputText = ({ field, label, handlData, contentType }) => {
-    const [empty, setEmpty] = useState(true)
+const CustomInputText = ({ field,value, label, handlData, contentType }) => {
+    const [empty, setEmpty] = useState(field)
 
+    useEffect(()=>{
+        if(empty !=""){
+            Animated.timing(transY.current, {
+                toValue: -40,
+                duration: 300,
+                useNativeDriver: true
+            }).start();
+        }
+    },[empty])
     const transY = useRef(new Animated.Value(0));
     const transX = transY.current.interpolate({
         inputRange: [-40, 0],
@@ -20,8 +29,8 @@ const CustomInputText = ({ field, label, handlData, contentType }) => {
             useNativeDriver: true
         }).start();
     }
-    const handleBlur = ({ field }) => {
-        if (field == null) {
+    const handleBlur = () => {
+        if (field === "") {
             Animated.timing(transY.current, {
                 toValue: 0,
                 duration: 300,
@@ -40,7 +49,7 @@ const CustomInputText = ({ field, label, handlData, contentType }) => {
             }]}>
                 <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{label}</Text>
             </Animated.View>
-            <TextInput keyboardType={contentType} onFocus={handleFocus} onBlur={() => handleBlur({ field: field })} style={{ width: '100%', alignContent: 'center' }} onChangeText={handlData} />
+            <TextInput keyboardType={contentType} defaultValue={value} onFocus={handleFocus} onBlur={() => handleBlur()} style={{ width: '100%', alignContent: 'center' }} onChangeText={handlData} />
         </View>
     );
 }

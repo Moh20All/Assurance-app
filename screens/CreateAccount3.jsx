@@ -4,6 +4,7 @@ import ProgressPoints from "../components/ProgressIndicator";
 import NextBtn from "../components/NextBtn";
 import CustomInputText from "../components/CustomInputText";
 import PasswordInput from "../components/PasswordInput";
+import axios from "axios";
 const Page3 = ({ navigation, route }) => {
 
     const [email, setEmail] = useState(null)
@@ -14,7 +15,7 @@ const Page3 = ({ navigation, route }) => {
     const [validconfirmPass, setvalidConfPass] = useState(true)
     const { firstName, lastName, selectedDate, idcmp, offerid, drivingLicense, carDocument } = route.params;
 
-    const handlNextBtn = () => {
+    const handlNextBtn = async () => {
         if (email == null) {
             setvalidEmail(false)
             Alert.alert("Invalid Email", "Please enter a valide email")
@@ -31,7 +32,22 @@ const Page3 = ({ navigation, route }) => {
             Alert.alert("Invalid Password", "Password should be length 8 at least")
         }
         else {
-            navigation.navigate('CreateAccount4', { firstName, lastName, selectedDate, idcmp, offerid, drivingLicense, carDocument, email, pass });
+            try {
+                const connect = await axios.get(`http://10.0.2.2:3000/verifyEmail/${email}`);
+                if (connect.status === 200) {
+                    navigation.navigate('CreateAccount4', { firstName, lastName, selectedDate, idcmp, offerid, drivingLicense, carDocument, email, pass });
+                }
+                else {
+                    if(connect.status === 200){
+                        Alert.alert('Warning',`Email already exist`)
+                    }
+                    
+                }
+            } catch (error) {
+                Alert.alert('Warning',`Email already exist`)
+
+                console.error(error)
+            }
 
         }
     }

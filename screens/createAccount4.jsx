@@ -3,6 +3,7 @@ import { View, SafeAreaView, Image, Platform, TouchableOpacity, Text, KeyboardAv
 import NextBtn from "../components/NextBtn";
 import ProgressPoints from "../components/ProgressIndicator";
 import colors from "../assets/Colors";
+import axios from 'axios';
 
 const CreateAccount4 = ({ navigation, route }) => {
     const [code1, setCode1] = useState("");
@@ -28,13 +29,30 @@ const CreateAccount4 = ({ navigation, route }) => {
         }
         return () => clearInterval(intervalId);
     }, [isResendEnabled, timer]);
+    async function postData() {
+        try {
+            console.log("we Try")
+            await axios.post("http://10.0.2.2:3000/newAccount", {
+                nom_ass: firstName,
+                prenom_ass: lastName,
+                email: email,
+                password: pass,
+            });
+            Alert.alert("Data Posted Successfully");
+            navigation.navigate("SignIn");
+        } catch (error) {
+            console.error(error);
+            Alert.alert("Error", "There was an error posting the data.");
+        }
+    }
 
     const handleNextBtn = () => {
         const confirmationCode = "1234";
         const enteredCode = code1 + code2 + code3 + code4;
 
         if (enteredCode === confirmationCode) {
-            navigation.navigate("SignIn");
+            postData()
+
         } else {
             Alert.alert("Invalid Confirmation Code", "Please enter the correct confirmation code.");
         }
@@ -78,7 +96,7 @@ const CreateAccount4 = ({ navigation, route }) => {
                             keyboardType="numeric"
                             onChangeText={(text) => {
                                 setCode3(text);
-                            }}
+                            }} 
                         />
                         <TextInput
                             style={styles.codeInput}
@@ -104,12 +122,10 @@ const CreateAccount4 = ({ navigation, route }) => {
                                 <Image style={{ width: 250, height: 250 }} source={require('../assets/images/hand.jpg')} />
                                 <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>Welcome to Relio <Text style={{ color: colors.blue }}>{firstName} {lastName}</Text></Text>
                                 <Text style={{ textAlign: 'center', color: 'black', marginVertical: 20 }}>An email will be sent to you once your document is verified</Text>
-                                <NextBtn handleButton={() => {
-                                    navigation.reset({
-                                        index: 0,
-                                        routes: [{ name: 'SignIn' }]
-                                    })
-                                }} value={"Sign In"} />
+                                <NextBtn handleButton={
+                                    handleNextBtn
+                                } value={"Sign In"}
+                                />
                             </View>
                         </View>
                     </Modal>

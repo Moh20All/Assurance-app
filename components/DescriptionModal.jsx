@@ -7,7 +7,7 @@ import NextBtn from "./NextBtn";
 import UploadDocuments from "./UploadDocuments";
 import colors from "../assets/Colors";
 
-const DescriptionModal = ({ city, description, drivingLicense, carDocument, contract, visible,navigation }) => {
+const DescriptionModal = ({ city, description,setCity,setDescr, drivingLicense, carDocument, contract, visible,navigation }) => {
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [selectedId, setSelectedId] = useState('1');
     
@@ -38,15 +38,17 @@ const DescriptionModal = ({ city, description, drivingLicense, carDocument, cont
             <View style={styles.dragIndicator} />
             <View style={styles.contentContainer}>
                 <CustomInputText
-                    field={true}
+                    field={city}
                     label={"City"}
-                    handlData={city}
+                    value={city}
+                    handlData={setCity}
                     contentType={'default'}
                 />
                 <CustomInputText
-                    field={true}
+                    field={description}
+                    value={description}
                     label={"Damage Details"}
-                    handlData={description}
+                    handlData={setDescr}
                     contentType={'default'}
                 />
                 <View style={styles.checkboxContainer}>

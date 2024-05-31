@@ -1,18 +1,21 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import colors from '../assets/Colors';
-
+import axios from 'axios';
+import ChangePassword from '../components/modifyPassword';
+import ModifyEmail from '../components/modifyEmail';
 const Profile = ({ route, navigation }) => {
-    userId = route.params;
+    const { userId = 'defaultUserId', firstName = 'FirstName', lastName = 'LastName' } = route.params || {};
+    const [visible,setVisible]=useState(false);
+    const [visible2,setVisible2]=useState(false);
     const userData = {
         name: 'John Doe',
         email: 'john.doe@example.com',
         insuranceNumber: '000754587456',
         statu: true
     };
-    // Convert userData object to a JSON string
-    const userDataString = JSON.stringify(userData);
+    const userDataString = JSON.stringify(userId);
 
     const handleLogout = () => {
         navigation.reset({
@@ -23,39 +26,58 @@ const Profile = ({ route, navigation }) => {
         });
     }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const connect = await axios.get('your-api-endpoint');
+                // Handle the response
+            } catch (error) {
+                // Handle the error
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={{ alignItems: 'center', padding: 20 }}>
                 <QRCode
                     value={userDataString}
-                    size={200} // Adjust the size as needed
+                    size={200}
                 />
             </View>
             <View style={styles.profileContainer}>
-                <Text style={styles.profileName}>{userData.name}</Text>
+                <Text style={styles.profileName}>{firstName} {lastName}</Text>
             </View>
             <View style={styles.infoContainer}>
-                <Text style={styles.infoLabel}>InsuranceNumber</Text>
-                <Text style={styles.infoValue}>{userData.insuranceNumber}</Text> 
-               <View style={[styles.activeIndicator, { backgroundColor:userData.statu? 'lightgreen':'red' }]} />
-
+                <Text style={styles.infoLabel}>Insurance Number</Text>
+                <Text style={styles.infoValue}>{userId}</Text> 
+                <View style={[styles.activeIndicator, { backgroundColor: userData.statu ? 'lightgreen' : 'red' }]} />
             </View>
 
             <View style={styles.linkContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('ForgetPassword')}>
+                <TouchableOpacity onPress={() => setVisible(true)}>
                     <Text style={styles.linkText}>Modify Password</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.linkContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setVisible2(true)}>
                     <Text style={styles.linkText}>Modify E-mail</Text>
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={handleLogout} style={{ marginHorizontal: '25%', backgroundColor: colors.lightBlue, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 50, width: '40%', borderRadius: 10, elevation: 10 }}>
-                <Image style={{ width: 30, height: 30, marginHorizontal: 10 }} source={require('../assets/icons/logout.png')} />
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#222222' }}>LogOut</Text>
+            <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+                <Image style={styles.logoutIcon} source={require('../assets/icons/logout.png')} />
+                <Text style={styles.logoutText}>LogOut</Text>
             </TouchableOpacity>
+
+            <Modal visible={visible} transparent={true} animationType='slide'>
+                <ChangePassword visible={()=>setVisible(false)} userId={userId}/>
+            </Modal>
+            <Modal visible={visible2} transparent={true} animationType='slide'>
+                <ModifyEmail visible={()=>setVisible2(false)} userId={userId}/>
+            </Modal>
         </View>
     );
 };
@@ -65,36 +87,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-    },
-    headerTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginLeft: 10,
-    },
     profileContainer: {
         alignItems: 'center',
         marginVertical: 20,
     },
     profileName: {
-        fontSize: 18,
+        fontSize: 30,
         fontWeight: 'bold',
         color: '#222222',
-        fontSize: 30
-    },
-    button: {
-        marginHorizontal: 20,
-        backgroundColor: 'blue',
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16,
     },
     infoContainer: {
         flexDirection: 'row',
@@ -121,13 +121,26 @@ const styles = StyleSheet.create({
         color: 'blue',
         fontSize: 16,
     },
-    qrContainer: {
+    logoutButton: {
+        marginHorizontal: '25%',
+        backgroundColor: colors.lightBlue,
+        flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 20,
+        justifyContent: 'center',
+        height: 50,
+        width: '40%',
+        borderRadius: 10,
+        elevation: 10,
     },
-    qrCode: {
-        width: 200,
-        height: 200,
+    logoutIcon: {
+        width: 30,
+        height: 30,
+        marginHorizontal: 10,
+    },
+    logoutText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#222222',
     },
 });
 

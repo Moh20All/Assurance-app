@@ -4,6 +4,7 @@ import PasswordInput from "../components/PasswordInput";
 import CustomInputText from "../components/CustomInputText";
 import colors from "../assets/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const SignIn = ({ navigation }) => {
     const [username, setUsername] = useState(null);
@@ -26,80 +27,24 @@ const SignIn = ({ navigation }) => {
         setPassword(text);
     };
  
-    const handleSignIn = () => {
-        // Construct the request body
-        setShow(true); // Toggling show state before the fetch request
-        const requestBody = {
-            email: username,
-            password: password
-        };
-
-        fetch('http://10.0.2.2:3000/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    setUser(false);
-                    setPass(false);
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Response:', data);
-                if (data.success) {
-                    console.log(data.user.user_id)
-                    fetch(`http://10.0.2.2:3000/check-assured/${data.user.user_id}`)
-                        .then(response => response.json())
-                        .then(assureCompteData => {
-                            if (assureCompteData.success) {
-                                setShow(false);
-                                navigation.reset({
-                                    index: 0,
-                                    routes: [{
-                                        name: 'Home', params: {
-                                            userId: data.user.user_id,
-                                            isValid: true
-                                        }
-                                    }],
-                                });
-
-                            } else {
-                                setShow(false);
-                                navigation.reset({
-                                    index: 0,
-                                    routes: [{
-                                        name: 'Home', params: {
-                                            userId: data.user.user_id,
-                                            isValid: false
-                                        }
-                                    }],
-                                });
-                                // Toggling show state after successful response
-                            }
-                        })
-                        .catch(error => {
-                            user = false; pass = false;
-                            console.error('Error checking assure_compte:', error);
-                            setShow(false); // Toggling show state after catch block
-                        });
-                } else {
-                    setUser(false);
-                    setPass(false);
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                setShow(false); // Toggling show state after catch block
+    const handleSignIn = async () => {
+        try {
+            const response = await axios.post('http://10.0.2.2:3000/Login', {
+                email: username,
+                password: password
             });
-        setShow(false); // This line will execute before the fetch request completes
-    };
 
+            if (response.status === 200) {
+                console.log("Login Successful: " + response.data.userId);
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Home', params: { userId: response.data.userId } }],
+                });
+            }
+        } catch (error) {
+            console.error("Login error: ", error.response ? error.response.data : error.message);
+        }
+    };
 
     const handleKeyboardDismiss = () => {
         Keyboard.dismiss()

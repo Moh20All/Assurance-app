@@ -3,10 +3,8 @@ import { View, StyleSheet ,PanResponder} from "react-native";
 import CustomInputText from "./CustomInputText";
 import NextBtn from "./NextBtn";
 
-const ClientInformation = ({ userId, contracts, selectedContract, setFirstName, setLastName, setEmail, visible }) => {
-    const [firstName, updateFirstName] = useState("");
-    const [lastName, updateLastName] = useState("");
-    const [email, updateEmail] = useState("");
+const ClientInformation = ({ass_name,ass_prenom,Email, setFirstName, setLastName, setEmail, visible }) => {
+   
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onPanResponderRelease: (evt, gestureState) => {
@@ -20,21 +18,24 @@ const ClientInformation = ({ userId, contracts, selectedContract, setFirstName, 
             <View style={{ width: '20%', height: 5, backgroundColor: 'grey',borderRadius:5,position:'absolute',top:10 }}></View>
             <View style={{ width: '100%', alignItems: 'center' }}>
                 <CustomInputText
-                    field={true}
+                    field={ass_name}
                     label={"First Name"}
-                    handlData={updateFirstName}
+                    value={ass_name}
+                    handlData={setFirstName}
                     contentType={'default'}
                 />
                 <CustomInputText
-                    field={true}
+                    field={ass_prenom}
                     label={"Last Name"}
-                    handlData={updateLastName}
+                    value={ass_prenom}
+                    handlData={setLastName}
                     contentType={'default'}
                 />
                 <CustomInputText
-                    field={true}
+                    field={Email}
                     label={"Email"}
-                    handlData={updateEmail}
+                    value={Email}
+                    handlData={setEmail}
                     contentType={'default'}
                 />
             </View>
@@ -42,9 +43,6 @@ const ClientInformation = ({ userId, contracts, selectedContract, setFirstName, 
             <NextBtn
                 value={'Save Changes'}
                 handleButton={() => {
-                    setFirstName(firstName);
-                    setLastName(lastName);
-                    setEmail(email);
                     visible(false);
                 }}
             />

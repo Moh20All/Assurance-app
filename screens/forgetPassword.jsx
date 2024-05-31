@@ -30,7 +30,6 @@ const ForgetPasswod = () => {
                 enabled behavior={Platform.OS === 'ios' ? 'padding' : null}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
             >
-                <ScrollView style={{ backgroundColor: 'white' }}>
 
                     <View style={styles.container}>
                         <Image source={require('../assets/images/forgetPasswordBG.jpg')} style={styles.imageBG} />
@@ -38,7 +37,7 @@ const ForgetPasswod = () => {
 
                         <View style={{ width: '80%', alignItems: 'center', flex: 1 }}>
                             <CustomInputText field={text} 
-                            label={useMethod ? "Enter your phone number" : 'Enter your Email'}
+                            label={'Enter your Email'}
                             handlData={handleInputChange}
                             
                             contentType={useMethod ? 'phone-pad' : 'email-address'}
@@ -47,19 +46,7 @@ const ForgetPasswod = () => {
                             
                         </View>
 
-
-                        <TouchableOpacity activeOpacity={1}
-                            onPress={() => setMethod(!useMethod)}
-                            onPressIn={handlePressIn}
-                            onPressOut={handlePressOut}
-                            style={{ marginTop: 40 }}>
-                            <Text style={[{ color: '#222222', textDecorationLine: 'underline', fontSize: 15, marginBottom: 110 }, pressed && styles.buttonPressed]}>
-                                {useMethod ? "Send via Email" : 'send via phone number'}
-                            </Text>
-                        </TouchableOpacity>
-
                     </View>
-                </ScrollView>
 
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -71,6 +58,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: 'white',
+        justifyContent:'center'
 
     },
     imageBG: {

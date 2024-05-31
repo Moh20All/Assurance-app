@@ -77,3 +77,8 @@ npm install @react-native-community/checkbox --save
 ```bash
 npm install react-native-camera --save
 ```
+
+# axios
+```bash
+npm install axios
+```
